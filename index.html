@@ -236,6 +236,13 @@
           <div class="team-count-options" id="tc-options"></div>
         </div>
       </div>
+      <div class="team-count-wrap">
+        <p class="tc-label">How many players total? (including you)</p>
+        <div class="team-count-row">
+          <span class="tc-fixed-label">Players</span>
+          <div class="team-count-options" id="pc-options"></div>
+        </div>
+      </div>
       <button class="btn btn-primary" onclick="createRoom()">Create room</button>
       <button class="btn" onclick="showScreen('s-lobby')">← Back</button>
     </div>
@@ -339,10 +346,11 @@ const ALL_ICONS = [
 
 let state = {
   roomCode: null, myName: null, myIcon: null,
-  isOrganizer: false, teamCount: 2, unsubscribe: null,
+  isOrganizer: false, teamCount: 2, maxPlayers: 4, unsubscribe: null,
 };
 
 let selectedTeamCount = 2;
+let selectedPlayerCount = 4;
 
 function buildTeamCountUI() {
   const container = document.getElementById('tc-options');
@@ -360,6 +368,23 @@ function buildTeamCountUI() {
   });
 }
 buildTeamCountUI();
+
+function buildPlayerCountUI() {
+  const container = document.getElementById('pc-options');
+  container.innerHTML = '';
+  [2, 3, 4, 5, 6, 7, 8, 9, 10].forEach(n => {
+    const el = document.createElement('div');
+    el.className = 'tc-opt' + (n === selectedPlayerCount ? ' active' : '');
+    el.textContent = n;
+    el.onclick = () => {
+      selectedPlayerCount = n;
+      document.querySelectorAll('#pc-options .tc-opt').forEach(o => o.classList.remove('active'));
+      el.classList.add('active');
+    };
+    container.appendChild(el);
+  });
+}
+buildPlayerCountUI();
 
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -402,9 +427,10 @@ async function createRoom() {
   state.myName = name;
   state.isOrganizer = true;
   state.teamCount = selectedTeamCount;
+  state.maxPlayers = selectedPlayerCount;
 
   await set(ref(db, `rooms/${code}`), {
-    created: Date.now(), revealed: false, teamCount: selectedTeamCount,
+    created: Date.now(), revealed: false, teamCount: selectedTeamCount, maxPlayers: selectedPlayerCount,
     players: { [name]: { picked: false, icon: null, joinedAt: Date.now() } }
   });
 
@@ -454,22 +480,23 @@ function subscribeRoom(code, role) {
     const room = snap.val();
     const players = room.players || {};
     const teamCount = room.teamCount || 2;
+    const maxPlayers = room.maxPlayers || Object.keys(players).length;
     state.teamCount = teamCount;
+    state.maxPlayers = maxPlayers;
 
     if (room.revealed) { renderReveal(players, teamCount); return; }
 
     const pickedCount = Object.values(players).filter(p => p.picked).length;
-    const total = Object.keys(players).length;
 
-    if (role === 'organizer') updateOrganizerView(players, pickedCount, total);
-    else updateWaitingView(players, pickedCount, total);
+    if (role === 'organizer') updateOrganizerView(players, pickedCount, maxPlayers);
+    else updateWaitingView(players, pickedCount, maxPlayers);
   });
 }
 
-function updateOrganizerView(players, picked, total) {
-  const pct = total > 0 ? Math.round((picked / total) * 100) : 0;
+function updateOrganizerView(players, picked, maxPlayers) {
+  const pct = maxPlayers > 0 ? Math.round((picked / maxPlayers) * 100) : 0;
   document.getElementById('org-prog').style.width = pct + '%';
-  document.getElementById('org-prog-label').textContent = `${picked} of ${total} picked`;
+  document.getElementById('org-prog-label').textContent = `${picked} of ${maxPlayers} picked`;
   const list = document.getElementById('org-player-list');
   list.innerHTML = '';
   Object.entries(players).forEach(([name, p]) => {
@@ -480,15 +507,19 @@ function updateOrganizerView(players, picked, total) {
       <span class="status-tag ${p.picked ? 'ready' : ''}">${p.picked ? 'ready' : 'choosing…'}</span>`;
     list.appendChild(li);
   });
-  document.getElementById('org-reveal-btn').disabled = picked === 0;
+  const allIn = picked >= maxPlayers;
+  const btn = document.getElementById('org-reveal-btn');
+  btn.disabled = picked === 0;
+  btn.textContent = allIn ? 'Reveal groups now ✦' : `Reveal groups now (${maxPlayers - picked} still picking…)`;
+  if (allIn) { btn.style.background = 'var(--accent)'; btn.style.color = '#1a1408'; btn.style.borderColor = 'var(--accent)'; }
 }
 
-function updateWaitingView(players, picked, total) {
+function updateWaitingView(players, picked, maxPlayers) {
   const currentScreen = document.querySelector('.screen.active');
   if (currentScreen && currentScreen.id === 's-pick') return;
-  const pct = total > 0 ? Math.round((picked / total) * 100) : 0;
+  const pct = maxPlayers > 0 ? Math.round((picked / maxPlayers) * 100) : 0;
   document.getElementById('wait-prog').style.width = pct + '%';
-  document.getElementById('wait-prog-label').textContent = `${picked} of ${total} picked`;
+  document.getElementById('wait-prog-label').textContent = `${picked} of ${maxPlayers} picked`;
   const list = document.getElementById('wait-player-list');
   list.innerHTML = '';
   Object.entries(players).forEach(([name, p]) => {
@@ -499,7 +530,7 @@ function updateWaitingView(players, picked, total) {
       <span class="status-tag ${p.picked ? 'ready' : ''}">${p.picked ? 'ready' : 'choosing…'}</span>`;
     list.appendChild(li);
   });
-  if (picked > 0 && picked >= total) {
+  if (picked > 0 && picked >= maxPlayers) {
     setTimeout(() => {
       get(ref(db, `rooms/${state.roomCode}`)).then(snap => {
         if (snap.exists()) {
@@ -585,12 +616,14 @@ window.copyCode = copyCode;
 
 function resetAll() {
   if (state.unsubscribe) state.unsubscribe();
-  state = { roomCode: null, myName: null, myIcon: null, isOrganizer: false, teamCount: 2, unsubscribe: null };
+  state = { roomCode: null, myName: null, myIcon: null, isOrganizer: false, teamCount: 2, maxPlayers: 4, unsubscribe: null };
   selectedTeamCount = 2;
+  selectedPlayerCount = 4;
   document.getElementById('organizer-name').value = '';
   document.getElementById('join-name').value = '';
   document.getElementById('join-code').value = '';
   buildTeamCountUI();
+  buildPlayerCountUI();
   showScreen('s-lobby');
 }
 window.resetAll = resetAll;
