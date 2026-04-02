@@ -78,7 +78,6 @@
   .divider { height: 1px; background: var(--border); margin: 1.5rem 0; }
 
   /* Team count selector */
-  .team-count-wrap { }
   .tc-label { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
   .team-count-row {
     display: flex; align-items: center;
@@ -145,15 +144,6 @@
   .status-tag { margin-left: auto; font-size: 11px; font-family: 'Syne', sans-serif; font-weight: 600; letter-spacing: 0.08em; color: var(--muted); }
   .status-tag.ready { color: var(--success); }
 
-  /* Waiting */
-  .mystery-reveal {
-    width: 80px; height: 80px; background: var(--surface2);
-    border: 1.5px dashed rgba(255,255,255,0.15); border-radius: 50%;
-    display: flex; align-items: center; justify-content: center; font-size: 32px;
-    margin: 0 auto 1.5rem; animation: pulse 2s ease-in-out infinite;
-  }
-  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-
   /* Room code */
   .room-code-box {
     background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm);
@@ -177,28 +167,24 @@
     border: 1px solid var(--border2); display: flex; align-items: center; justify-content: center;
     font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; color: var(--muted); flex-shrink: 0;
   }
-  .gh-0 { background: rgba(232,135,42,0.08); }
-  .gh-1 { background: rgba(123,156,206,0.08); }
-  .gh-2 { background: rgba(90,186,138,0.08); }
-  .gh-3 { background: rgba(200,100,200,0.08); }
-  .gh-4 { background: rgba(220,180,60,0.08); }
-  .gh-5 { background: rgba(100,180,220,0.08); }
+  .gh-0 { background: rgba(232,135,42,0.15); }
+  .gh-1 { background: rgba(123,156,206,0.15); }
+  .gh-2 { background: rgba(90,186,138,0.15); }
+  .gh-3 { background: rgba(200,100,200,0.15); }
+  .gh-4 { background: rgba(220,180,60,0.15); }
+  .gh-5 { background: rgba(100,180,220,0.15); }
 
-  /* Lobby */
   .lobby-option {
     background: var(--surface2); border: 1.5px solid var(--border); border-radius: var(--radius);
     padding: 1.25rem; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 14px;
   }
   .lobby-option:hover { border-color: var(--border2); transform: translateY(-1px); }
   .lobby-option-icon { font-size: 28px; }
-  .lobby-option-text h3 { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
-  .lobby-option-text p { font-size: 13px; margin: 0; }
 </style>
 </head>
 <body>
 <div class="app">
 
-  <!-- LOBBY -->
   <div id="s-lobby" class="screen active">
     <div style="margin-bottom:2rem;">
       <div class="eyebrow">Secret Groups</div>
@@ -222,26 +208,18 @@
     </div>
   </div>
 
-  <!-- CREATE ROOM -->
   <div id="s-create" class="screen">
     <div class="eyebrow">Organizer</div>
     <h2 style="margin-bottom:0.5rem;">Create a room</h2>
-    <p style="margin-bottom:1.5rem;">Set up your game, then pick your own icon.</p>
     <div class="stack">
       <input type="text" id="organizer-name" placeholder="Your name..." />
       <div class="team-count-wrap">
         <p class="tc-label">How many teams?</p>
-        <div class="team-count-row">
-          <span class="tc-fixed-label">Teams</span>
-          <div class="team-count-options" id="tc-options"></div>
-        </div>
+        <div class="team-count-row" id="tc-options-row"></div>
       </div>
       <div class="team-count-wrap">
-        <p class="tc-label">How many players total? (including you)</p>
-        <div class="team-count-row">
-          <span class="tc-fixed-label">Players</span>
-          <div class="team-count-options" id="pc-options"></div>
-        </div>
+        <p class="tc-label">Total players?</p>
+        <div class="team-count-row" id="pc-options-row"></div>
       </div>
       <button class="btn btn-primary" onclick="createRoom()">Create room</button>
       <button class="btn" onclick="showScreen('s-lobby')">← Back</button>
@@ -249,71 +227,51 @@
     <p class="error" id="create-error"></p>
   </div>
 
-  <!-- JOIN ROOM -->
   <div id="s-join" class="screen">
     <div class="eyebrow">Player</div>
     <h2 style="margin-bottom:0.5rem;">Join a room</h2>
-    <p style="margin-bottom:1.5rem;">Get the 4-letter code from your organizer.</p>
     <div class="stack">
       <input type="text" id="join-name" placeholder="Your name..." autocomplete="off" />
-      <input type="text" id="join-code" placeholder="Room code (e.g. WOLF)" maxlength="4"
-             style="text-transform:uppercase;letter-spacing:0.15em;font-family:'Syne',sans-serif;font-size:18px;font-weight:700;"
-             oninput="this.value=this.value.toUpperCase()" />
+      <input type="text" id="join-code" placeholder="Room code" maxlength="4" style="text-transform:uppercase;" />
       <button class="btn btn-primary" onclick="joinRoom()">Join</button>
       <button class="btn" onclick="showScreen('s-lobby')">← Back</button>
     </div>
     <p class="error" id="join-error"></p>
   </div>
 
-  <!-- ORGANIZER DASHBOARD -->
-  <div id="s-organizer" class="screen">
-    <div class="eyebrow">Organizer view</div>
-    <h2 style="margin-bottom:1.25rem;">Share this code</h2>
-    <div class="room-code-box">
-      <div>
-        <div class="room-code-label">Room code</div>
-        <div class="room-code-val" id="display-code">—</div>
-      </div>
-      <button class="btn btn-sm" onclick="copyCode()">Copy</button>
-    </div>
-    <p style="margin-bottom:1rem;">Waiting for everyone to pick...</p>
-    <div class="progress-track"><div class="progress-fill" id="org-prog" style="width:0%"></div></div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:1rem;" id="org-prog-label">0 picked</p>
-    <ul class="player-list" id="org-player-list"></ul>
-    <div class="divider"></div>
-    <button class="btn btn-primary" id="org-reveal-btn" onclick="forceReveal()" disabled>Reveal groups now</button>
-  </div>
-
-  <!-- PICK ICON -->
   <div id="s-pick" class="screen">
     <div class="eyebrow">Your choice</div>
-    <h2 style="margin-bottom:0.4rem;">Pick your icon</h2>
-    <p style="margin-bottom:0;">Icons are hidden — choose wisely.</p>
+    <h2 id="pick-title">Pick your icon</h2>
+    <p>The final teams are randomized!</p>
     <div class="icon-grid" id="icon-grid"></div>
     <button class="btn btn-primary" id="confirm-btn" onclick="confirmPick()" disabled>Confirm my choice</button>
   </div>
 
-  <!-- WAITING (player) -->
-  <div id="s-waiting" class="screen" style="text-align:center;">
-    <div class="mystery-reveal">?</div>
-    <h2 style="margin-bottom:0.5rem;">You're in!</h2>
-    <p>Waiting for everyone else to pick...</p>
+  <div id="s-waiting" class="screen">
+    <div class="eyebrow" id="wait-role-label">Waiting...</div>
+    <div id="org-code-area" style="display:none;">
+      <h2 style="margin-bottom:1.25rem;">Share this code</h2>
+      <div class="room-code-box">
+        <div class="room-code-val" id="display-code">—</div>
+        <button class="btn btn-sm" onclick="copyCode()">Copy</button>
+      </div>
+    </div>
+    <p id="wait-msg">Waiting for everyone else to pick...</p>
     <div class="progress-track"><div class="progress-fill" id="wait-prog" style="width:0%"></div></div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:1rem;" id="wait-prog-label">0 picked</p>
+    <p style="font-size:13px;color:var(--muted);" id="wait-prog-label">0 picked</p>
     <ul class="player-list" id="wait-player-list"></ul>
+    <div id="org-actions" style="display:none; margin-top:20px;">
+        <button class="btn btn-primary" id="org-reveal-btn" onclick="forceReveal()" disabled>Reveal groups now</button>
+    </div>
   </div>
 
-  <!-- REVEAL -->
   <div id="s-reveal" class="screen">
     <div class="reveal-banner">
       <span class="reveal-emoji">🎉</span>
       <h2>Groups revealed!</h2>
-      <p style="margin-top:6px;">Here's how everyone split up</p>
     </div>
     <div id="group-container"></div>
-    <div style="margin-top:1.5rem;">
-      <button class="btn" onclick="resetAll()">Start over</button>
-    </div>
+    <button class="btn" onclick="resetAll()" style="margin-top:20px;">Start over</button>
   </div>
 
 </div>
@@ -336,106 +294,107 @@ const fbApp = initializeApp(firebaseConfig);
 const db = getDatabase(fbApp);
 
 const ALL_ICONS = [
-  { emoji: "🦊", name: "Fox" },
-  { emoji: "🐺", name: "Wolf" },
-  { emoji: "🦅", name: "Eagle" },
-  { emoji: "🐯", name: "Tiger" },
-  { emoji: "🦁", name: "Lion" },
-  { emoji: "🐉", name: "Dragon" },
+  { emoji: "🦊", name: "Fox" }, { emoji: "🐺", name: "Wolf" },
+  { emoji: "🦅", name: "Eagle" }, { emoji: "🐯", name: "Tiger" },
+  { emoji: "🦁", name: "Lion" }, { emoji: "🐉", name: "Dragon" },
 ];
 
 let state = {
   roomCode: null, myName: null, myIcon: null,
-  isOrganizer: false, teamCount: 2, maxPlayers: 4, unsubscribe: null,
+  isOrganizer: false, teamCount: 2, maxPlayers: 4, unsubscribe: null
 };
 
-let selectedTeamCount = 2;
-let selectedPlayerCount = 4;
+let selTeamCount = 2;
+let selMaxPlayers = 4;
 
-function buildTeamCountUI() {
-  const container = document.getElementById('tc-options');
-  container.innerHTML = '';
-  [2, 3, 4, 5, 6].forEach(n => {
-    const el = document.createElement('div');
-    el.className = 'tc-opt' + (n === selectedTeamCount ? ' active' : '');
-    el.textContent = n;
-    el.onclick = () => {
-      selectedTeamCount = n;
-      document.querySelectorAll('.tc-opt').forEach(o => o.classList.remove('active'));
-      el.classList.add('active');
-    };
-    container.appendChild(el);
-  });
+// --- PERSISTENCE LOGIC ---
+async function checkReconnect() {
+    const savedCode = localStorage.getItem('sg_roomCode');
+    const savedName = localStorage.getItem('sg_myName');
+    if (savedCode && savedName) {
+        const snap = await get(ref(db, `rooms/${savedCode}`));
+        if (snap.exists()) {
+            const room = snap.val();
+            state.roomCode = savedCode;
+            state.myName = savedName;
+            state.isOrganizer = room.organizer === savedName;
+            state.teamCount = room.teamCount;
+            
+            if (room.revealed) {
+                renderReveal(room.players, room.teamCount, room.seed || 0);
+            } else if (room.players[savedName] && room.players[savedName].picked) {
+                subscribeRoom(savedCode);
+                showScreen('s-waiting');
+            } else {
+                buildIconGrid(room.teamCount);
+                showScreen('s-pick');
+            }
+        }
+    }
 }
-buildTeamCountUI();
+window.onload = checkReconnect;
 
-function buildPlayerCountUI() {
-  const container = document.getElementById('pc-options');
-  container.innerHTML = '';
-  [2, 3, 4, 5, 6, 7, 8, 9, 10].forEach(n => {
-    const el = document.createElement('div');
-    el.className = 'tc-opt' + (n === selectedPlayerCount ? ' active' : '');
-    el.textContent = n;
-    el.onclick = () => {
-      selectedPlayerCount = n;
-      document.querySelectorAll('#pc-options .tc-opt').forEach(o => o.classList.remove('active'));
-      el.classList.add('active');
-    };
-    container.appendChild(el);
-  });
-}
-buildPlayerCountUI();
-
+// --- UI HELPERS ---
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  const el = document.getElementById(id);
-  if (el) el.classList.add('active');
+  document.getElementById(id).classList.add('active');
 }
 window.showScreen = showScreen;
 
-function randCode() {
-  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
-  let c = '';
-  for (let i = 0; i < 4; i++) c += chars[Math.floor(Math.random() * chars.length)];
-  return c;
+function buildOptions() {
+    const tr = document.getElementById('tc-options-row');
+    tr.innerHTML = '';
+    [2,3,4,5,6].forEach(n => {
+        const d = document.createElement('div');
+        d.className = `tc-opt ${n===selTeamCount?'active':''}`;
+        d.textContent = n;
+        d.onclick = () => { selTeamCount = n; buildOptions(); };
+        tr.appendChild(d);
+    });
+    const pr = document.getElementById('pc-options-row');
+    pr.innerHTML = '';
+    [2,3,4,5,6,8,10,12].forEach(n => {
+        const d = document.createElement('div');
+        d.className = `tc-opt ${n===selMaxPlayers?'active':''}`;
+        d.textContent = n;
+        d.onclick = () => { selMaxPlayers = n; buildOptions(); };
+        pr.appendChild(d);
+    });
 }
+buildOptions();
 
-function buildIconGrid(teamCount) {
+function buildIconGrid(count) {
   const grid = document.getElementById('icon-grid');
-  const cols = teamCount <= 2 ? 2 : teamCount <= 4 ? 2 : 3;
-  grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
   grid.innerHTML = '';
-  for (let i = 0; i < teamCount; i++) {
+  grid.style.gridTemplateColumns = count > 3 ? 'repeat(3, 1fr)' : 'repeat(2, 1fr)';
+  for (let i = 0; i < count; i++) {
     const card = document.createElement('div');
     card.className = 'icon-card';
-    card.id = 'ic-' + i;
-    card.innerHTML = `<span class="big-emoji">?</span>
-      <span class="option-label">Option ${i + 1}</span>
-      <div class="check-badge"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#1a1408" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>`;
-    card.onclick = () => selectIcon(i);
+    card.innerHTML = `<span class="big-emoji">?</span><span class="option-label">Box ${i+1}</span>
+    <div class="check-badge"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#1a1408" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>`;
+    card.onclick = () => {
+        state.myIcon = i;
+        document.querySelectorAll('.icon-card').forEach((c,idx) => c.classList.toggle('selected', idx===i));
+        document.getElementById('confirm-btn').disabled = false;
+    };
     grid.appendChild(card);
   }
-  document.getElementById('confirm-btn').disabled = true;
-  state.myIcon = null;
 }
 
+// --- CORE LOGIC ---
 async function createRoom() {
   const name = document.getElementById('organizer-name').value.trim();
-  if (!name) { document.getElementById('create-error').textContent = 'Enter your name.'; return; }
-  const code = randCode();
-  state.roomCode = code;
-  state.myName = name;
-  state.isOrganizer = true;
-  state.teamCount = selectedTeamCount;
-  state.maxPlayers = selectedPlayerCount;
+  if (!name) return;
+  const code = Math.random().toString(36).substring(2,6).toUpperCase();
+  state = { roomCode: code, myName: name, isOrganizer: true, teamCount: selTeamCount };
+  localStorage.setItem('sg_roomCode', code);
+  localStorage.setItem('sg_myName', name);
 
   await set(ref(db, `rooms/${code}`), {
-    created: Date.now(), revealed: false, teamCount: selectedTeamCount, maxPlayers: selectedPlayerCount,
-    players: { [name]: { picked: false, icon: null, joinedAt: Date.now() } }
+    organizer: name, revealed: false, teamCount: selTeamCount, maxPlayers: selMaxPlayers,
+    players: { [name]: { picked: false, icon: null } }
   });
-
-  document.getElementById('display-code').textContent = code;
-  buildIconGrid(selectedTeamCount);
+  buildIconGrid(selTeamCount);
   showScreen('s-pick');
 }
 window.createRoom = createRoom;
@@ -443,193 +402,104 @@ window.createRoom = createRoom;
 async function joinRoom() {
   const name = document.getElementById('join-name').value.trim();
   const code = document.getElementById('join-code').value.trim().toUpperCase();
-  const err = document.getElementById('join-error');
-  err.textContent = '';
-  if (!name) { err.textContent = 'Enter your name.'; return; }
-  if (code.length !== 4) { err.textContent = 'Enter a 4-letter room code.'; return; }
-
+  if (!name || code.length < 4) return;
   const snap = await get(ref(db, `rooms/${code}`));
-  if (!snap.exists()) { err.textContent = 'Room not found. Check the code.'; return; }
+  if (!snap.exists()) return;
+  
+  state = { roomCode: code, myName: name, isOrganizer: false, teamCount: snap.val().teamCount };
+  localStorage.setItem('sg_roomCode', code);
+  localStorage.setItem('sg_myName', name);
 
-  const room = snap.val();
-  const players = room.players || {};
-  const teamCount = room.teamCount || 2;
-
-  if (players[name] && players[name].picked) { err.textContent = 'This name has already picked.'; return; }
-
-  state.roomCode = code;
-  state.myName = name;
-  state.isOrganizer = false;
-  state.teamCount = teamCount;
-
-  await update(ref(db, `rooms/${code}/players/${name}`), {
-    picked: false, icon: null, joinedAt: Date.now()
-  });
-
-  buildIconGrid(teamCount);
-  subscribeRoom(code, 'player');
+  await update(ref(db, `rooms/${code}/players/${name}`), { picked: false, icon: null });
+  buildIconGrid(state.teamCount);
   showScreen('s-pick');
 }
 window.joinRoom = joinRoom;
 
-function subscribeRoom(code, role) {
-  if (state.unsubscribe) state.unsubscribe();
-  const roomRef = ref(db, `rooms/${code}`);
-  state.unsubscribe = onValue(roomRef, (snap) => {
-    if (!snap.exists()) return;
-    const room = snap.val();
-    const players = room.players || {};
-    const teamCount = room.teamCount || 2;
-    const maxPlayers = room.maxPlayers || Object.keys(players).length;
-    state.teamCount = teamCount;
-    state.maxPlayers = maxPlayers;
-
-    if (room.revealed) { renderReveal(players, teamCount); return; }
-
-    const pickedCount = Object.values(players).filter(p => p.picked).length;
-
-    if (role === 'organizer') updateOrganizerView(players, pickedCount, maxPlayers);
-    else updateWaitingView(players, pickedCount, maxPlayers);
-  });
-}
-
-function updateOrganizerView(players, picked, maxPlayers) {
-  const pct = maxPlayers > 0 ? Math.round((picked / maxPlayers) * 100) : 0;
-  document.getElementById('org-prog').style.width = pct + '%';
-  document.getElementById('org-prog-label').textContent = `${picked} of ${maxPlayers} picked`;
-  const list = document.getElementById('org-player-list');
-  list.innerHTML = '';
-  Object.entries(players).forEach(([name, p]) => {
-    const li = document.createElement('li');
-    li.className = 'player-item';
-    li.innerHTML = `<span class="status-dot ${p.picked ? 'done' : ''}"></span>
-      <span>${name}</span>
-      <span class="status-tag ${p.picked ? 'ready' : ''}">${p.picked ? 'ready' : 'choosing…'}</span>`;
-    list.appendChild(li);
-  });
-  const allIn = picked >= maxPlayers;
-  const btn = document.getElementById('org-reveal-btn');
-  btn.disabled = picked === 0;
-  btn.textContent = allIn ? 'Reveal groups now ✦' : `Reveal groups now (${maxPlayers - picked} still picking…)`;
-  if (allIn) { btn.style.background = 'var(--accent)'; btn.style.color = '#1a1408'; btn.style.borderColor = 'var(--accent)'; }
-}
-
-function updateWaitingView(players, picked, maxPlayers) {
-  const currentScreen = document.querySelector('.screen.active');
-  if (currentScreen && currentScreen.id === 's-pick') return;
-  const pct = maxPlayers > 0 ? Math.round((picked / maxPlayers) * 100) : 0;
-  document.getElementById('wait-prog').style.width = pct + '%';
-  document.getElementById('wait-prog-label').textContent = `${picked} of ${maxPlayers} picked`;
-  const list = document.getElementById('wait-player-list');
-  list.innerHTML = '';
-  Object.entries(players).forEach(([name, p]) => {
-    const li = document.createElement('li');
-    li.className = 'player-item';
-    li.innerHTML = `<span class="status-dot ${p.picked ? 'done' : ''}"></span>
-      <span>${name}</span>
-      <span class="status-tag ${p.picked ? 'ready' : ''}">${p.picked ? 'ready' : 'choosing…'}</span>`;
-    list.appendChild(li);
-  });
-  if (picked > 0 && picked >= maxPlayers) {
-    setTimeout(() => {
-      get(ref(db, `rooms/${state.roomCode}`)).then(snap => {
-        if (snap.exists()) {
-          const room = snap.val();
-          renderReveal(room.players || {}, room.teamCount || 2);
-        }
-      });
-    }, 400);
-  }
-}
-
-function selectIcon(i) {
-  state.myIcon = i;
-  document.querySelectorAll('.icon-card').forEach((c, idx) => c.classList.toggle('selected', idx === i));
-  document.getElementById('confirm-btn').disabled = false;
-}
-window.selectIcon = selectIcon;
-
 async function confirmPick() {
-  if (state.myIcon === null) return;
-  await update(ref(db, `rooms/${state.roomCode}/players/${state.myName}`), {
-    picked: true, icon: state.myIcon
-  });
-  if (state.isOrganizer) {
-    subscribeRoom(state.roomCode, 'organizer');
-    showScreen('s-organizer');
-  } else {
-    const snap = await get(ref(db, `rooms/${state.roomCode}/players`));
-    const players = snap.val() || {};
-    const picked = Object.values(players).filter(p => p.picked).length;
-    const total = Object.keys(players).length;
-    document.getElementById('wait-prog').style.width = Math.round((picked / total) * 100) + '%';
-    document.getElementById('wait-prog-label').textContent = `${picked} of ${total} picked`;
-    subscribeRoom(state.roomCode, 'player');
-    showScreen('s-waiting');
-  }
+  await update(ref(db, `rooms/${state.roomCode}/players/${state.myName}`), { picked: true, icon: state.myIcon });
+  subscribeRoom(state.roomCode);
+  showScreen('s-waiting');
 }
 window.confirmPick = confirmPick;
 
+function subscribeRoom(code) {
+  if (state.unsubscribe) state.unsubscribe();
+  state.unsubscribe = onValue(ref(db, `rooms/${code}`), (snap) => {
+    const room = snap.val();
+    if (!room) return;
+    if (room.revealed) {
+        renderReveal(room.players, room.teamCount, room.seed || 0);
+        return;
+    }
+    const players = Object.entries(room.players);
+    const picked = players.filter(p => p[1].picked).length;
+    const total = room.maxPlayers;
+    
+    document.getElementById('wait-prog').style.width = (picked/total*100) + '%';
+    document.getElementById('wait-prog-label').textContent = `${picked} of ${total} picked`;
+    document.getElementById('wait-player-list').innerHTML = players.map(p => `
+        <li class="player-item">
+            <span class="status-dot ${p[1].picked?'done':''}"></span>
+            <span>${p[0]}</span>
+            <span class="status-tag">${p[1].picked?'ready':'picking...'}</span>
+        </li>`).join('');
+
+    if (state.isOrganizer) {
+        document.getElementById('org-code-area').style.display = 'block';
+        document.getElementById('org-actions').style.display = 'block';
+        document.getElementById('display-code').textContent = code;
+        document.getElementById('org-reveal-btn').disabled = (picked === 0);
+    }
+  });
+}
+
 async function forceReveal() {
-  await update(ref(db, `rooms/${state.roomCode}`), { revealed: true });
+  // Use a random seed so randomization is different every game
+  const seed = Math.floor(Math.random() * 1000);
+  await update(ref(db, `rooms/${state.roomCode}`), { revealed: true, seed: seed });
 }
 window.forceReveal = forceReveal;
 
-function renderReveal(players, teamCount) {
-  const icons = ALL_ICONS.slice(0, teamCount);
+function renderReveal(players, teamCount, seed) {
+  // Logic: Shuffle the icons using the seed so "Box 1" becomes a random animal
+  const shuffledIcons = [...ALL_ICONS].slice(0, teamCount)
+                        .sort((a, b) => ((seed + ALL_ICONS.indexOf(a)) % 3) - 1);
+  
   const groups = Array.from({ length: teamCount }, () => []);
   Object.entries(players).forEach(([name, p]) => {
-    const idx = (p.icon !== null && p.icon !== undefined) ? Number(p.icon) : 0;
-    if (groups[idx]) groups[idx].push(name);
+    if (p.icon !== null && groups[p.icon]) groups[p.icon].push(name);
   });
+
   const container = document.getElementById('group-container');
   container.innerHTML = '';
-  icons.forEach((ic, i) => {
+  shuffledIcons.forEach((ic, i) => {
     const block = document.createElement('div');
     block.className = 'group-block';
     block.innerHTML = `
       <div class="group-header gh-${i}">
         <span class="group-icon">${ic.emoji}</span>
         <span class="group-title">Team ${ic.name}</span>
-        <span class="group-count">${groups[i].length} member${groups[i].length !== 1 ? 's' : ''}</span>
+        <span class="group-count">${groups[i].length}</span>
       </div>
-      <div class="group-members">
-        ${groups[i].length === 0
-          ? '<p style="font-size:13px;color:var(--muted);padding:4px 0;">Nobody picked this one</p>'
-          : groups[i].map(n => `<div class="member-row">
-              <div class="avatar">${n.substring(0,2).toUpperCase()}</div>
-              <span>${n}</span>
-            </div>`).join('')}
-      </div>`;
+      <div class="group-members">${groups[i].map(n => `<div class="member-row"><div class="avatar">${n[0]}</div>${n}</div>`).join('')}</div>`;
     container.appendChild(block);
   });
   showScreen('s-reveal');
 }
 
-function copyCode() {
-  navigator.clipboard.writeText(state.roomCode).catch(() => {});
-  const btn = event.target;
-  btn.textContent = 'Copied!';
-  setTimeout(() => btn.textContent = 'Copy', 1800);
-}
-window.copyCode = copyCode;
-
 function resetAll() {
-  if (state.unsubscribe) state.unsubscribe();
-  state = { roomCode: null, myName: null, myIcon: null, isOrganizer: false, teamCount: 2, maxPlayers: 4, unsubscribe: null };
-  selectedTeamCount = 2;
-  selectedPlayerCount = 4;
-  document.getElementById('organizer-name').value = '';
-  document.getElementById('join-name').value = '';
-  document.getElementById('join-code').value = '';
-  buildTeamCountUI();
-  buildPlayerCountUI();
-  showScreen('s-lobby');
+    localStorage.clear();
+    location.reload();
 }
 window.resetAll = resetAll;
 
-document.getElementById('organizer-name').addEventListener('keydown', e => { if (e.key === 'Enter') createRoom(); });
-document.getElementById('join-code').addEventListener('keydown', e => { if (e.key === 'Enter') joinRoom(); });
+function copyCode() {
+  navigator.clipboard.writeText(state.roomCode);
+  alert("Code copied!");
+}
+window.copyCode = copyCode;
+
 </script>
 </body>
 </html>
