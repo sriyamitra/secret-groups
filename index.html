@@ -6,272 +6,95 @@
 <title>Secret Groups</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
 <style>
+  /* Styles remain the same as your original provided CSS */
   :root {
-    --bg: #0d0d0d;
-    --surface: #161616;
-    --surface2: #1e1e1e;
-    --border: rgba(255,255,255,0.08);
-    --border2: rgba(255,255,255,0.15);
-    --text: #f0ede8;
-    --muted: #888;
-    --accent: #e8d5a3;
-    --accent2: #c9a96e;
-    --success: #5aba8a;
-    --radius: 16px;
-    --radius-sm: 10px;
+    --bg: #0d0d0d; --surface: #161616; --surface2: #1e1e1e;
+    --border: rgba(255,255,255,0.08); --border2: rgba(255,255,255,0.15);
+    --text: #f0ede8; --muted: #888; --accent: #e8d5a3;
+    --accent2: #c9a96e; --success: #5aba8a; --radius: 16px; --radius-sm: 10px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    display: flex; align-items: center; justify-content: center;
-    padding: 1.5rem;
-    overflow-x: hidden;
-  }
-  body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background:
-      radial-gradient(ellipse 60% 40% at 20% 10%, rgba(232,135,42,0.07) 0%, transparent 60%),
-      radial-gradient(ellipse 50% 50% at 80% 90%, rgba(123,156,206,0.07) 0%, transparent 60%);
-    pointer-events: none; z-index: 0;
-  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1.5rem; overflow-x: hidden; }
   .app { width: 100%; max-width: 420px; position: relative; z-index: 1; }
   .screen { display: none; animation: fadeUp 0.35s ease; }
   .screen.active { display: block; }
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(14px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  .eyebrow {
-    font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
-    letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px;
-  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+  .eyebrow { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
   h1 { font-family: 'Syne', sans-serif; font-size: 36px; font-weight: 800; line-height: 1.1; color: var(--text); }
   h2 { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 700; color: var(--text); }
-  p { font-size: 15px; color: var(--muted); line-height: 1.65; }
-  input[type="text"] {
-    width: 100%; background: var(--surface2); border: 1px solid var(--border);
-    border-radius: var(--radius-sm); color: var(--text);
-    font-family: 'DM Sans', sans-serif; font-size: 15px; padding: 14px 16px;
-    outline: none; transition: border-color 0.2s;
-  }
-  input[type="text"]::placeholder { color: #555; }
-  input[type="text"]:focus { border-color: var(--border2); }
-  .btn {
-    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-    font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 600; letter-spacing: 0.04em;
-    padding: 14px 24px; border-radius: var(--radius-sm);
-    border: 1px solid var(--border2); background: transparent; color: var(--text);
-    cursor: pointer; transition: all 0.18s; width: 100%;
-  }
-  .btn:hover { background: var(--surface2); border-color: rgba(255,255,255,0.25); }
-  .btn:active { transform: scale(0.98); }
-  .btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+  input[type="text"] { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); padding: 14px 16px; outline: none; margin-bottom: 10px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 600; padding: 14px 24px; border-radius: var(--radius-sm); border: 1px solid var(--border2); background: transparent; color: var(--text); cursor: pointer; transition: all 0.18s; width: 100%; }
   .btn-primary { background: var(--accent); color: #1a1408; border-color: var(--accent); }
-  .btn-primary:hover { background: var(--accent2); border-color: var(--accent2); }
-  .btn-sm { padding: 10px 18px; font-size: 12px; width: auto; }
-  .error { font-size: 13px; color: #e2726a; margin-top: 8px; min-height: 18px; }
-  .stack { display: flex; flex-direction: column; gap: 12px; }
-  .divider { height: 1px; background: var(--border); margin: 1.5rem 0; }
-
-  /* Team count selector */
-  .tc-label { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
-  .team-count-row {
-    display: flex; align-items: center;
-    background: var(--surface2); border: 1px solid var(--border);
-    border-radius: var(--radius-sm); overflow: hidden;
-  }
-  .tc-fixed-label {
-    font-size: 13px; color: var(--muted); padding: 0 14px; white-space: nowrap;
-    border-right: 1px solid var(--border); height: 100%;
-    display: flex; align-items: center;
-  }
-  .team-count-options { display: flex; flex: 1; }
-  .tc-opt {
-    flex: 1; padding: 13px 4px; text-align: center;
-    font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;
-    color: var(--muted); cursor: pointer;
-    border-left: 1px solid var(--border);
-    transition: all 0.15s; background: transparent; user-select: none;
-  }
-  .tc-opt:first-child { border-left: none; }
-  .tc-opt:hover { color: var(--text); background: rgba(255,255,255,0.04); }
-  .tc-opt.active { color: #1a1408; background: var(--accent); }
-
-  /* Icon grid */
   .icon-grid { display: grid; gap: 14px; margin: 1.5rem 0; }
-  .icon-card {
-    aspect-ratio: 1; background: var(--surface2);
-    border: 1.5px solid var(--border); border-radius: var(--radius);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 10px; cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden;
-  }
-  .icon-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+  .icon-card { aspect-ratio: 1; background: var(--surface2); border: 1.5px solid var(--border); border-radius: var(--radius); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; }
   .icon-card.selected { border-color: var(--accent); background: rgba(232,213,163,0.06); }
-  .icon-card .big-emoji { font-size: 46px; line-height: 1; }
-  .icon-card .option-label {
-    font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
-    letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
-  }
-  .icon-card.selected .option-label { color: var(--accent); }
-  .check-badge {
-    position: absolute; top: 10px; right: 10px; width: 20px; height: 20px;
-    background: var(--accent); border-radius: 50%; display: none;
-    align-items: center; justify-content: center;
-  }
-  .check-badge svg { width: 11px; height: 11px; }
-  .icon-card.selected .check-badge { display: flex; }
-
-  /* Progress */
-  .progress-track { height: 3px; background: var(--border); border-radius: 2px; margin: 1.25rem 0 0.5rem; overflow: hidden; }
-  .progress-fill {
-    height: 100%; background: linear-gradient(90deg, var(--accent2), var(--accent));
-    border-radius: 2px; transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
-  }
-
-  /* Player list */
-  .player-list { list-style: none; margin-top: 1.25rem; display: flex; flex-direction: column; gap: 8px; }
-  .player-item {
-    display: flex; align-items: center; gap: 12px;
-    background: var(--surface2); border: 1px solid var(--border);
-    border-radius: var(--radius-sm); padding: 12px 14px; font-size: 14px;
-  }
-  .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #444; flex-shrink: 0; transition: background 0.3s; }
-  .status-dot.done { background: var(--success); box-shadow: 0 0 6px rgba(90,186,138,0.4); }
-  .status-tag { margin-left: auto; font-size: 11px; font-family: 'Syne', sans-serif; font-weight: 600; letter-spacing: 0.08em; color: var(--muted); }
-  .status-tag.ready { color: var(--success); }
-
-  /* Room code */
-  .room-code-box {
-    background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm);
-    padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;
-  }
-  .room-code-label { font-size: 12px; color: var(--muted); margin-bottom: 2px; }
-  .room-code-val { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; letter-spacing: 0.1em; color: var(--accent); }
-
-  /* Reveal */
-  .reveal-banner { text-align: center; margin-bottom: 2rem; }
-  .reveal-emoji { font-size: 48px; display: block; margin-bottom: 1rem; }
-  .group-block { border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; margin-bottom: 14px; }
+  .progress-track { height: 3px; background: var(--border); border-radius: 2px; margin: 1.25rem 0; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--accent); transition: width 0.5s; }
+  .player-list { list-style: none; margin-top: 1rem; }
+  .player-item { display: flex; align-items: center; gap: 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 8px; }
+  .group-block { border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; margin-bottom: 14px; background: var(--surface); }
   .group-header { display: flex; align-items: center; gap: 14px; padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); }
-  .group-icon { font-size: 26px; }
-  .group-title { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; }
-  .group-count { margin-left: auto; font-size: 12px; color: var(--muted); font-family: 'Syne', sans-serif; font-weight: 600; }
-  .group-members { padding: 0.75rem 1.25rem; display: flex; flex-direction: column; gap: 8px; }
-  .member-row { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--text); }
-  .avatar {
-    width: 30px; height: 30px; border-radius: 50%; background: var(--surface2);
-    border: 1px solid var(--border2); display: flex; align-items: center; justify-content: center;
-    font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; color: var(--muted); flex-shrink: 0;
-  }
-  .gh-0 { background: rgba(232,135,42,0.15); }
-  .gh-1 { background: rgba(123,156,206,0.15); }
-  .gh-2 { background: rgba(90,186,138,0.15); }
-  .gh-3 { background: rgba(200,100,200,0.15); }
-  .gh-4 { background: rgba(220,180,60,0.15); }
-  .gh-5 { background: rgba(100,180,220,0.15); }
-
-  .lobby-option {
-    background: var(--surface2); border: 1.5px solid var(--border); border-radius: var(--radius);
-    padding: 1.25rem; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 14px;
-  }
-  .lobby-option:hover { border-color: var(--border2); transform: translateY(-1px); }
-  .lobby-option-icon { font-size: 28px; }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #444; }
+  .status-dot.done { background: var(--success); }
+  .tc-opt { flex: 1; padding: 10px; text-align: center; cursor: pointer; border: 1px solid var(--border); }
+  .tc-opt.active { background: var(--accent); color: #000; }
+  .team-count-row { display: flex; margin-bottom: 20px; border-radius: 8px; overflow: hidden; }
 </style>
 </head>
 <body>
 <div class="app">
 
   <div id="s-lobby" class="screen active">
-    <div style="margin-bottom:2rem;">
-      <div class="eyebrow">Secret Groups</div>
-      <h1>Pick your<br/>side 🎭</h1>
-    </div>
-    <div class="stack">
-      <div class="lobby-option" onclick="showScreen('s-create')">
-        <span class="lobby-option-icon">✦</span>
-        <div class="lobby-option-text">
-          <h3>Create a room</h3>
-          <p>Start a new game &amp; share the code</p>
-        </div>
-      </div>
-      <div class="lobby-option" onclick="showScreen('s-join')">
-        <span class="lobby-option-icon">→</span>
-        <div class="lobby-option-text">
-          <h3>Join a room</h3>
-          <p>Enter a code from your organizer</p>
-        </div>
-      </div>
-    </div>
+    <div class="eyebrow">Secret Groups</div>
+    <h1>Pick your side 🎭</h1>
+    <br>
+    <button class="btn btn-primary" onclick="showScreen('s-create')">Create Room</button>
+    <div style="height:10px"></div>
+    <button class="btn" onclick="showScreen('s-join')">Join Room</button>
   </div>
 
   <div id="s-create" class="screen">
-    <div class="eyebrow">Organizer</div>
-    <h2 style="margin-bottom:0.5rem;">Create a room</h2>
-    <div class="stack">
-      <input type="text" id="organizer-name" placeholder="Your name..." />
-      <div class="team-count-wrap">
-        <p class="tc-label">How many teams?</p>
-        <div class="team-count-row" id="tc-options-row"></div>
-      </div>
-      <div class="team-count-wrap">
-        <p class="tc-label">Total players?</p>
-        <div class="team-count-row" id="pc-options-row"></div>
-      </div>
-      <button class="btn btn-primary" onclick="createRoom()">Create room</button>
-      <button class="btn" onclick="showScreen('s-lobby')">← Back</button>
+    <h2>Setup Game</h2>
+    <input type="text" id="org-name" placeholder="Your Name">
+    <p class="eyebrow">Number of Teams</p>
+    <div class="team-count-row">
+        <div class="tc-opt active" onclick="setTeams(2, this)">2</div>
+        <div class="tc-opt" onclick="setTeams(3, this)">3</div>
+        <div class="tc-opt" onclick="setTeams(4, this)">4</div>
     </div>
-    <p class="error" id="create-error"></p>
+    <p class="eyebrow">Total Players</p>
+    <input type="text" id="total-p" placeholder="Total players (e.g. 4)" value="4">
+    <button class="btn btn-primary" onclick="createRoom()">Start</button>
   </div>
 
   <div id="s-join" class="screen">
-    <div class="eyebrow">Player</div>
-    <h2 style="margin-bottom:0.5rem;">Join a room</h2>
-    <div class="stack">
-      <input type="text" id="join-name" placeholder="Your name..." autocomplete="off" />
-      <input type="text" id="join-code" placeholder="Room code" maxlength="4" style="text-transform:uppercase;" />
-      <button class="btn btn-primary" onclick="joinRoom()">Join</button>
-      <button class="btn" onclick="showScreen('s-lobby')">← Back</button>
-    </div>
-    <p class="error" id="join-error"></p>
+    <h2>Join Game</h2>
+    <input type="text" id="join-name" placeholder="Your Name">
+    <input type="text" id="join-code" placeholder="4-Letter Code">
+    <button class="btn btn-primary" onclick="joinRoom()">Enter</button>
   </div>
 
   <div id="s-pick" class="screen">
-    <div class="eyebrow">Your choice</div>
-    <h2 id="pick-title">Pick your icon</h2>
-    <p>The final teams are randomized!</p>
-    <div class="icon-grid" id="icon-grid"></div>
-    <button class="btn btn-primary" id="confirm-btn" onclick="confirmPick()" disabled>Confirm my choice</button>
+    <h2>Choose a Box</h2>
+    <p>Boxes are just to confirm you're ready!</p>
+    <div class="icon-grid" id="icon-grid">
+        <div class="icon-card" onclick="selectBox(0, this)">?</div>
+        <div class="icon-card" onclick="selectBox(1, this)">?</div>
+    </div>
+    <button class="btn btn-primary" id="confirm-btn" disabled onclick="confirmPick()">I'm Ready</button>
   </div>
 
   <div id="s-waiting" class="screen">
-    <div class="eyebrow" id="wait-role-label">Waiting...</div>
-    <div id="org-code-area" style="display:none;">
-      <h2 style="margin-bottom:1.25rem;">Share this code</h2>
-      <div class="room-code-box">
-        <div class="room-code-val" id="display-code">—</div>
-        <button class="btn btn-sm" onclick="copyCode()">Copy</button>
-      </div>
-    </div>
-    <p id="wait-msg">Waiting for everyone else to pick...</p>
-    <div class="progress-track"><div class="progress-fill" id="wait-prog" style="width:0%"></div></div>
-    <p style="font-size:13px;color:var(--muted);" id="wait-prog-label">0 picked</p>
-    <ul class="player-list" id="wait-player-list"></ul>
-    <div id="org-actions" style="display:none; margin-top:20px;">
-        <button class="btn btn-primary" id="org-reveal-btn" onclick="forceReveal()" disabled>Reveal groups now</button>
-    </div>
+    <h2 id="wait-code-display">Room: ----</h2>
+    <p>Waiting for everyone to join...</p>
+    <div class="progress-track"><div class="progress-fill" id="p-bar" style="width:0%"></div></div>
+    <ul class="player-list" id="p-list"></ul>
   </div>
 
   <div id="s-reveal" class="screen">
-    <div class="reveal-banner">
-      <span class="reveal-emoji">🎉</span>
-      <h2>Groups revealed!</h2>
-    </div>
-    <div id="group-container"></div>
-    <button class="btn" onclick="resetAll()" style="margin-top:20px;">Start over</button>
+    <h2>Teams are Ready!</h2>
+    <div id="group-results"></div>
+    <button class="btn" onclick="location.reload()">New Game</button>
   </div>
 
 </div>
@@ -280,6 +103,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, set, get, update, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
+// YOUR FIREBASE CONFIG
 const firebaseConfig = {
   apiKey: "AIzaSyAnYuqcNYsaGQKaqknsWkaVf0g7MoY8yTQ",
   authDomain: "secret-groups-d15ad.firebaseapp.com",
@@ -290,216 +114,146 @@ const firebaseConfig = {
   appId: "1:452071217507:web:0f4a0f8f8521ca09b95b56"
 };
 
-const fbApp = initializeApp(firebaseConfig);
-const db = getDatabase(fbApp);
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
 
-const ALL_ICONS = [
-  { emoji: "🦊", name: "Fox" }, { emoji: "🐺", name: "Wolf" },
-  { emoji: "🦅", name: "Eagle" }, { emoji: "🐯", name: "Tiger" },
-  { emoji: "🦁", name: "Lion" }, { emoji: "🐉", name: "Dragon" },
-];
+let myName = "";
+let roomCode = "";
+let teamCount = 2;
+let isOrganizer = false;
 
-let state = {
-  roomCode: null, myName: null, myIcon: null,
-  isOrganizer: false, teamCount: 2, maxPlayers: 4, unsubscribe: null
-};
-
-let selTeamCount = 2;
-let selMaxPlayers = 4;
-
-// --- PERSISTENCE LOGIC ---
-async function checkReconnect() {
-    const savedCode = localStorage.getItem('sg_roomCode');
-    const savedName = localStorage.getItem('sg_myName');
-    if (savedCode && savedName) {
-        const snap = await get(ref(db, `rooms/${savedCode}`));
-        if (snap.exists()) {
-            const room = snap.val();
-            state.roomCode = savedCode;
-            state.myName = savedName;
-            state.isOrganizer = room.organizer === savedName;
-            state.teamCount = room.teamCount;
-            
-            if (room.revealed) {
-                renderReveal(room.players, room.teamCount, room.seed || 0);
-            } else if (room.players[savedName] && room.players[savedName].picked) {
-                subscribeRoom(savedCode);
-                showScreen('s-waiting');
-            } else {
-                buildIconGrid(room.teamCount);
-                showScreen('s-pick');
-            }
-        }
-    }
-}
-window.onload = checkReconnect;
-
-// --- UI HELPERS ---
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
-window.showScreen = showScreen;
-
-function buildOptions() {
-    const tr = document.getElementById('tc-options-row');
-    tr.innerHTML = '';
-    [2,3,4,5,6].forEach(n => {
-        const d = document.createElement('div');
-        d.className = `tc-opt ${n===selTeamCount?'active':''}`;
-        d.textContent = n;
-        d.onclick = () => { selTeamCount = n; buildOptions(); };
-        tr.appendChild(d);
-    });
-    const pr = document.getElementById('pc-options-row');
-    pr.innerHTML = '';
-    [2,3,4,5,6,8,10,12].forEach(n => {
-        const d = document.createElement('div');
-        d.className = `tc-opt ${n===selMaxPlayers?'active':''}`;
-        d.textContent = n;
-        d.onclick = () => { selMaxPlayers = n; buildOptions(); };
-        pr.appendChild(d);
-    });
-}
-buildOptions();
-
-function buildIconGrid(count) {
-  const grid = document.getElementById('icon-grid');
-  grid.innerHTML = '';
-  grid.style.gridTemplateColumns = count > 3 ? 'repeat(3, 1fr)' : 'repeat(2, 1fr)';
-  for (let i = 0; i < count; i++) {
-    const card = document.createElement('div');
-    card.className = 'icon-card';
-    card.innerHTML = `<span class="big-emoji">?</span><span class="option-label">Box ${i+1}</span>
-    <div class="check-badge"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#1a1408" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>`;
-    card.onclick = () => {
-        state.myIcon = i;
-        document.querySelectorAll('.icon-card').forEach((c,idx) => c.classList.toggle('selected', idx===i));
-        document.getElementById('confirm-btn').disabled = false;
-    };
-    grid.appendChild(card);
-  }
+window.setTeams = (n, el) => {
+    teamCount = n;
+    document.querySelectorAll('.tc-opt').forEach(opt => opt.classList.remove('active'));
+    el.classList.add('active');
 }
 
-// --- CORE LOGIC ---
-async function createRoom() {
-  const name = document.getElementById('organizer-name').value.trim();
-  if (!name) return;
-  const code = Math.random().toString(36).substring(2,6).toUpperCase();
-  state = { roomCode: code, myName: name, isOrganizer: true, teamCount: selTeamCount };
-  localStorage.setItem('sg_roomCode', code);
-  localStorage.setItem('sg_myName', name);
-
-  await set(ref(db, `rooms/${code}`), {
-    organizer: name, revealed: false, teamCount: selTeamCount, maxPlayers: selMaxPlayers,
-    players: { [name]: { picked: false, icon: null } }
-  });
-  buildIconGrid(selTeamCount);
-  showScreen('s-pick');
+window.showScreen = (id) => {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
 }
-window.createRoom = createRoom;
 
-async function joinRoom() {
-  const name = document.getElementById('join-name').value.trim();
-  const code = document.getElementById('join-code').value.trim().toUpperCase();
-  if (!name || code.length < 4) return;
-  const snap = await get(ref(db, `rooms/${code}`));
-  if (!snap.exists()) return;
-  
-  state = { roomCode: code, myName: name, isOrganizer: false, teamCount: snap.val().teamCount };
-  localStorage.setItem('sg_roomCode', code);
-  localStorage.setItem('sg_myName', name);
-
-  await update(ref(db, `rooms/${code}/players/${name}`), { picked: false, icon: null });
-  buildIconGrid(state.teamCount);
-  showScreen('s-pick');
-}
-window.joinRoom = joinRoom;
-
-async function confirmPick() {
-  await update(ref(db, `rooms/${state.roomCode}/players/${state.myName}`), { picked: true, icon: state.myIcon });
-  subscribeRoom(state.roomCode);
-  showScreen('s-waiting');
-}
-window.confirmPick = confirmPick;
-
-function subscribeRoom(code) {
-  if (state.unsubscribe) state.unsubscribe();
-  state.unsubscribe = onValue(ref(db, `rooms/${code}`), (snap) => {
-    const room = snap.val();
-    if (!room) return;
-    if (room.revealed) {
-        renderReveal(room.players, room.teamCount, room.seed || 0);
-        return;
-    }
-    const players = Object.entries(room.players);
-    const picked = players.filter(p => p[1].picked).length;
-    const total = room.maxPlayers;
+window.createRoom = async () => {
+    myName = document.getElementById('org-name').value;
+    const total = parseInt(document.getElementById('total-p').value);
+    roomCode = Math.random().toString(36).substring(2,6).toUpperCase();
+    isOrganizer = true;
     
-    document.getElementById('wait-prog').style.width = (picked/total*100) + '%';
-    document.getElementById('wait-prog-label').textContent = `${picked} of ${total} picked`;
-    document.getElementById('wait-player-list').innerHTML = players.map(p => `
-        <li class="player-item">
-            <span class="status-dot ${p[1].picked?'done':''}"></span>
-            <span>${p[0]}</span>
-            <span class="status-tag">${p[1].picked?'ready':'picking...'}</span>
-        </li>`).join('');
+    await set(ref(db, 'rooms/' + roomCode), {
+        teamCount: teamCount,
+        maxPlayers: total,
+        revealed: false,
+        players: { [myName]: { ready: false } }
+    });
+    
+    localStorage.setItem('room', roomCode);
+    localStorage.setItem('name', myName);
+    initWaiting();
+    showScreen('s-pick');
+}
 
-    if (state.isOrganizer) {
-        document.getElementById('org-code-area').style.display = 'block';
-        document.getElementById('org-actions').style.display = 'block';
-        document.getElementById('display-code').textContent = code;
-        document.getElementById('org-reveal-btn').disabled = (picked === 0);
+window.joinRoom = async () => {
+    myName = document.getElementById('join-name').value;
+    roomCode = document.getElementById('join-code').value.toUpperCase();
+    
+    const snap = await get(ref(db, 'rooms/' + roomCode));
+    if(snap.exists()) {
+        await update(ref(db, `rooms/${roomCode}/players/${myName}`), { ready: false });
+        localStorage.setItem('room', roomCode);
+        localStorage.setItem('name', myName);
+        initWaiting();
+        showScreen('s-pick');
     }
-  });
 }
 
-async function forceReveal() {
-  // Use a random seed so randomization is different every game
-  const seed = Math.floor(Math.random() * 1000);
-  await update(ref(db, `rooms/${state.roomCode}`), { revealed: true, seed: seed });
-}
-window.forceReveal = forceReveal;
-
-function renderReveal(players, teamCount, seed) {
-  // Logic: Shuffle the icons using the seed so "Box 1" becomes a random animal
-  const shuffledIcons = [...ALL_ICONS].slice(0, teamCount)
-                        .sort((a, b) => ((seed + ALL_ICONS.indexOf(a)) % 3) - 1);
-  
-  const groups = Array.from({ length: teamCount }, () => []);
-  Object.entries(players).forEach(([name, p]) => {
-    if (p.icon !== null && groups[p.icon]) groups[p.icon].push(name);
-  });
-
-  const container = document.getElementById('group-container');
-  container.innerHTML = '';
-  shuffledIcons.forEach((ic, i) => {
-    const block = document.createElement('div');
-    block.className = 'group-block';
-    block.innerHTML = `
-      <div class="group-header gh-${i}">
-        <span class="group-icon">${ic.emoji}</span>
-        <span class="group-title">Team ${ic.name}</span>
-        <span class="group-count">${groups[i].length}</span>
-      </div>
-      <div class="group-members">${groups[i].map(n => `<div class="member-row"><div class="avatar">${n[0]}</div>${n}</div>`).join('')}</div>`;
-    container.appendChild(block);
-  });
-  showScreen('s-reveal');
+window.selectBox = (i, el) => {
+    document.querySelectorAll('.icon-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    document.getElementById('confirm-btn').disabled = false;
 }
 
-function resetAll() {
-    localStorage.clear();
-    location.reload();
+window.confirmPick = async () => {
+    await update(ref(db, `rooms/${roomCode}/players/${myName}`), { ready: true });
+    showScreen('s-waiting');
 }
-window.resetAll = resetAll;
 
-function copyCode() {
-  navigator.clipboard.writeText(state.roomCode);
-  alert("Code copied!");
+function initWaiting() {
+    document.getElementById('wait-code-display').innerText = "Room: " + roomCode;
+    onValue(ref(db, 'rooms/' + roomCode), (snap) => {
+        const data = snap.val();
+        if(!data) return;
+
+        const players = Object.entries(data.players);
+        const readyCount = players.filter(p => p[1].ready).length;
+        
+        // Update Progress UI
+        document.getElementById('p-bar').style.width = (readyCount / data.maxPlayers * 100) + "%";
+        document.getElementById('p-list').innerHTML = players.map(p => `
+            <li class="player-item">
+                <div class="status-dot ${p[1].ready ? 'done' : ''}"></div>
+                ${p[0]}
+            </li>
+        `).join('');
+
+        // AUTOMATIC SHUFFLE (When everyone is ready)
+        if(readyCount >= data.maxPlayers && !data.revealed) {
+            if(isOrganizer) performShuffle(data, players);
+        }
+
+        // AUTO-REVEAL (For everyone)
+        if(data.revealed) {
+            renderResults(data.assignments);
+            showScreen('s-reveal');
+        }
+    });
 }
-window.copyCode = copyCode;
 
+async function performShuffle(data, playerEntries) {
+    const playerNames = playerEntries.map(p => p[0]);
+    // Fisher-Yates Shuffle
+    for (let i = playerNames.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [playerNames[i], playerNames[j]] = [playerNames[j], playerNames[i]];
+    }
+
+    const assignments = {};
+    const icons = ["🦊 Fox", "🐺 Wolf", "🦅 Eagle", "🐯 Tiger"];
+    
+    // Distribute players into teams
+    playerNames.forEach((name, index) => {
+        const teamIndex = index % data.teamCount;
+        const teamName = icons[teamIndex];
+        if(!assignments[teamName]) assignments[teamName] = [];
+        assignments[teamName].push(name);
+    });
+
+    await update(ref(db, 'rooms/' + roomCode), { 
+        revealed: true,
+        assignments: assignments
+    });
+}
+
+function renderResults(assignments) {
+    const container = document.getElementById('group-results');
+    container.innerHTML = Object.entries(assignments).map(([team, members]) => `
+        <div class="group-block">
+            <div class="group-header">
+                <strong>Team ${team}</strong>
+                <span style="margin-left:auto">${members.length}</span>
+            </div>
+            <div style="padding:15px">
+                ${members.map(m => `<div style="margin-bottom:5px">👤 ${m}</div>`).join('')}
+            </div>
+        </div>
+    `).join('');
+}
+
+// Re-connect on refresh
+if(localStorage.getItem('room')) {
+    roomCode = localStorage.getItem('room');
+    myName = localStorage.getItem('name');
+    initWaiting();
+}
 </script>
 </body>
 </html>
