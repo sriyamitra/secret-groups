@@ -246,7 +246,9 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 let myName = "", roomCode = "", teamCount = 2, isOrganizer = false;
-let revealShown = false; // prevent double-trigger
+let revealShown = false;
+let shuffling = false;       // guard: prevent performShuffle racing
+let roomListener = null;     // hold ref so we can detach before re-attaching
 
 window.setTeams = (n, el) => {
   teamCount = n;
@@ -312,8 +314,13 @@ window.confirmPick = async () => {
 function initWaiting() {
   document.getElementById('wait-room-code').innerText = roomCode;
   revealShown = false;
+  shuffling = false;
 
-  onValue(ref(db, 'rooms/' + roomCode), (snap) => {
+  // Detach any existing listener before attaching a new one
+  if (roomListener) { roomListener(); roomListener = null; }
+
+  const roomRef = ref(db, 'rooms/' + roomCode);
+  roomListener = onValue(roomRef, (snap) => {
     const data = snap.val();
     if (!data) { resetAll(); return; }
 
@@ -333,12 +340,13 @@ function initWaiting() {
         <span class="player-status">${info.ready ? 'Ready ✓' : 'Choosing…'}</span>
       </li>`).join('');
 
-    // Organizer triggers shuffle when all ready
-    if (readyCount >= total && !data.revealed && isOrganizer) {
+    // Only organizer triggers shuffle — guarded so it only fires ONCE
+    if (isOrganizer && !data.revealed && !shuffling && readyCount >= total) {
+      shuffling = true;
       performShuffle(data, players);
     }
 
-    // EVERYONE sees reveal when data.revealed is true
+    // EVERYONE: as soon as revealed=true appears in Firebase, show results
     if (data.revealed && !revealShown) {
       revealShown = true;
       renderResults(data.assignments);
@@ -379,11 +387,12 @@ function renderResults(assignments) {
 }
 
 window.resetAll = async () => {
+  if (roomListener) { roomListener(); roomListener = null; }
   if (isOrganizer && roomCode) {
     try { await remove(ref(db, 'rooms/' + roomCode)); } catch(e) {}
   }
   localStorage.clear();
-  myName = ''; roomCode = ''; isOrganizer = false; revealShown = false;
+  myName = ''; roomCode = ''; isOrganizer = false; revealShown = false; shuffling = false;
   // Reset forms
   ['org-name','total-p','join-name','join-code'].forEach(id => {
     const el = document.getElementById(id);
