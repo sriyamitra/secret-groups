@@ -13,8 +13,8 @@
     --accent2: #c9a96e; --success: #5aba8a; --radius: 16px; --radius-sm: 10px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1.5rem; overflow-x: hidden; }
-  .app { width: 100%; max-width: 420px; position: relative; z-index: 1; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
+  .app { width: 100%; max-width: 420px; position: relative; }
   .screen { display: none; animation: fadeUp 0.35s ease; }
   .screen.active { display: block; }
   @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
@@ -23,19 +23,16 @@
   h1 { font-family: 'Syne', sans-serif; font-size: 36px; font-weight: 800; line-height: 1.1; color: var(--text); }
   h2 { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 700; color: var(--text); margin-bottom: 15px; }
   
-  input[type="text"] { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); padding: 14px 16px; outline: none; margin-bottom: 12px; font-family: inherit; }
+  input[type="text"] { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); padding: 14px 16px; outline: none; margin-bottom: 12px; }
   
-  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 600; padding: 14px 24px; border-radius: var(--radius-sm); border: 1px solid var(--border2); background: transparent; color: var(--text); cursor: pointer; transition: all 0.18s; width: 100%; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 600; padding: 14px 24px; border-radius: var(--radius-sm); border: 1px solid var(--border2); background: transparent; color: var(--text); cursor: pointer; transition: all 0.18s; width: 100%; }
   .btn-primary { background: var(--accent); color: #1a1408; border-color: var(--accent); }
   .btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
-  /* Icon Grid Styles */
   .icon-grid { display: grid; gap: 14px; margin: 1.5rem 0; }
-  .icon-card { aspect-ratio: 1; background: var(--surface2); border: 1.5px solid var(--border); border-radius: var(--radius); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; position: relative; }
-  .icon-card:hover { border-color: var(--border2); }
+  .icon-card { aspect-ratio: 1; background: var(--surface2); border: 1.5px solid var(--border); border-radius: var(--radius); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; }
   .icon-card.selected { border-color: var(--accent); background: rgba(232,213,163,0.06); }
-  .big-emoji { font-size: 40px; margin-bottom: 8px; }
-  .option-label { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--muted); }
+  .option-label { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--muted); margin-top: 8px; }
 
   .progress-track { height: 3px; background: var(--border); border-radius: 2px; margin: 1.5rem 0; overflow: hidden; }
   .progress-fill { height: 100%; background: var(--accent); transition: width 0.5s; }
@@ -59,7 +56,7 @@
   <div id="s-lobby" class="screen active">
     <div class="eyebrow">Secret Groups</div>
     <h1>Pick your side 🎭</h1>
-    <div style="margin-top: 30px;" class="stack">
+    <div style="margin-top: 30px;">
       <button class="btn btn-primary" onclick="showScreen('s-create')">Create Room</button>
       <div style="height:12px"></div>
       <button class="btn" onclick="showScreen('s-join')">Join Room</button>
@@ -70,15 +67,15 @@
     <div class="eyebrow">Organizer</div>
     <h2>New Room</h2>
     <input type="text" id="org-name" placeholder="Your Name">
-    <p class="eyebrow">Number of Teams</p>
+    <p class="eyebrow">Teams</p>
     <div class="tc-row">
         <div class="tc-opt active" onclick="setTeams(2, this)">2</div>
         <div class="tc-opt" onclick="setTeams(3, this)">3</div>
         <div class="tc-opt" onclick="setTeams(4, this)">4</div>
     </div>
-    <p class="eyebrow">Total Players (Target)</p>
+    <p class="eyebrow">Total Players</p>
     <input type="text" id="total-p" placeholder="Total players" value="4">
-    <button class="btn btn-primary" onclick="createRoom()">Create & Continue</button>
+    <button class="btn btn-primary" onclick="createRoom()">Create</button>
     <button class="btn" onclick="showScreen('s-lobby')" style="border:none; margin-top:10px;">Back</button>
   </div>
 
@@ -87,14 +84,13 @@
     <h2>Join Room</h2>
     <input type="text" id="join-name" placeholder="Your Name">
     <input type="text" id="join-code" placeholder="4-Letter Code" style="text-transform: uppercase;">
-    <button class="btn btn-primary" onclick="joinRoom()">Enter Room</button>
+    <button class="btn btn-primary" onclick="joinRoom()">Enter</button>
     <button class="btn" onclick="showScreen('s-lobby')" style="border:none; margin-top:10px;">Back</button>
   </div>
 
   <div id="s-pick" class="screen">
     <div class="eyebrow">The Choice</div>
     <h2>Pick a Box</h2>
-    <p style="color: var(--muted); font-size: 14px;">Your selection determines your fate...</p>
     <div class="icon-grid" id="icon-grid"></div>
     <button class="btn btn-primary" id="confirm-btn" disabled onclick="confirmPick()">Confirm Choice</button>
   </div>
@@ -102,7 +98,6 @@
   <div id="s-waiting" class="screen">
     <div class="eyebrow" id="wait-room-label">Room: ----</div>
     <h2>Waiting...</h2>
-    <p id="wait-msg">Waiting for others to make their choice.</p>
     <div class="progress-track"><div class="progress-fill" id="p-bar" style="width:0%"></div></div>
     <ul class="player-list" id="p-list"></ul>
   </div>
@@ -113,14 +108,14 @@
         <h2>Groups Revealed!</h2>
     </div>
     <div id="group-results"></div>
-    <button class="btn btn-primary" onclick="resetAll()" style="margin-top: 20px;">Start Over</button>
+    <button class="btn btn-primary" onclick="resetAll()">Start Over (New Game)</button>
   </div>
 
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, set, get, update, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getDatabase, ref, set, get, update, onValue, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAnYuqcNYsaGQKaqknsWkaVf0g7MoY8yTQ",
@@ -139,7 +134,6 @@ let myName = "";
 let roomCode = "";
 let teamCount = 2;
 let isOrganizer = false;
-let mySelection = null;
 
 window.setTeams = (n, el) => {
     teamCount = n;
@@ -155,51 +149,35 @@ window.showScreen = (id) => {
 window.createRoom = async () => {
     myName = document.getElementById('org-name').value.trim();
     const total = parseInt(document.getElementById('total-p').value);
-    if(!myName || isNaN(total)) return alert("Fill all fields");
-    
+    if(!myName || isNaN(total)) return;
     roomCode = Math.random().toString(36).substring(2,6).toUpperCase();
     isOrganizer = true;
-    
     await set(ref(db, 'rooms/' + roomCode), {
-        teamCount: teamCount,
-        maxPlayers: total,
-        revealed: false,
+        teamCount: teamCount, maxPlayers: total, revealed: false, organizer: myName,
         players: { [myName]: { ready: false } }
     });
-    
-    saveSession();
-    buildIconGrid();
-    showScreen('s-pick');
+    saveSession(); buildIconGrid(); showScreen('s-pick');
 }
 
 window.joinRoom = async () => {
     myName = document.getElementById('join-name').value.trim();
     roomCode = document.getElementById('join-code').value.toUpperCase().trim();
-    if(!myName || !roomCode) return;
-    
     const snap = await get(ref(db, 'rooms/' + roomCode));
     if(snap.exists()) {
-        const data = snap.val();
-        teamCount = data.teamCount;
+        teamCount = snap.val().teamCount;
         await update(ref(db, `rooms/${roomCode}/players/${myName}`), { ready: false });
-        saveSession();
-        buildIconGrid();
-        showScreen('s-pick');
-    } else {
-        alert("Room not found");
+        saveSession(); buildIconGrid(); showScreen('s-pick');
     }
 }
 
 function buildIconGrid() {
     const grid = document.getElementById('icon-grid');
     grid.innerHTML = '';
-    // Show cards based on team count
     for (let i = 0; i < teamCount; i++) {
         const card = document.createElement('div');
         card.className = 'icon-card';
-        card.innerHTML = `<span class="big-emoji">❓</span><span class="option-label">Box ${i+1}</span>`;
+        card.innerHTML = `<span style="font-size:30px">❓</span><span class="option-label">Box ${i+1}</span>`;
         card.onclick = () => {
-            mySelection = i;
             document.querySelectorAll('.icon-card').forEach(c => c.classList.remove('selected'));
             card.classList.add('selected');
             document.getElementById('confirm-btn').disabled = false;
@@ -210,78 +188,53 @@ function buildIconGrid() {
 
 window.confirmPick = async () => {
     await update(ref(db, `rooms/${roomCode}/players/${myName}`), { ready: true });
-    initWaiting();
-    showScreen('s-waiting');
+    initWaiting(); showScreen('s-waiting');
 }
 
 function initWaiting() {
     document.getElementById('wait-room-label').innerText = "Room: " + roomCode;
     onValue(ref(db, 'rooms/' + roomCode), (snap) => {
         const data = snap.val();
-        if(!data) return;
+        if(!data) { location.reload(); return; } // If room deleted, kick to lobby
 
         const players = Object.entries(data.players);
         const readyCount = players.filter(p => p[1].ready).length;
-        
         document.getElementById('p-bar').style.width = (readyCount / data.maxPlayers * 100) + "%";
         document.getElementById('p-list').innerHTML = players.map(p => `
-            <li class="player-item">
-                <div class="status-dot ${p[1].ready ? 'done' : ''}"></div>
-                ${p[0]} ${p[0] === myName ? '(You)' : ''}
-            </li>
-        `).join('');
+            <li class="player-item"><div class="status-dot ${p[1].ready ? 'done' : ''}"></div>${p[0]}</li>`).join('');
 
-        // Logic: Organizer shuffles when everyone is ready
-        if(readyCount >= data.maxPlayers && !data.revealed && isOrganizer) {
-            performShuffle(data, players);
-        }
-
-        // Trigger Reveal screen for everyone
-        if(data.revealed) {
-            renderResults(data.assignments);
-            showScreen('s-reveal');
-        }
+        if(readyCount >= data.maxPlayers && !data.revealed && isOrganizer) performShuffle(data, players);
+        if(data.revealed) { renderResults(data.assignments); showScreen('s-reveal'); }
     });
 }
 
 async function performShuffle(data, playerEntries) {
-    let names = playerEntries.map(p => p[0]);
-    // Randomize list
-    names.sort(() => Math.random() - 0.5);
-
+    let names = playerEntries.map(p => p[0]).sort(() => Math.random() - 0.5);
     const assignments = {};
     const icons = ["🦊 Fox", "🐺 Wolf", "🦅 Eagle", "🐯 Tiger"];
-    
     names.forEach((name, index) => {
         const teamName = icons[index % data.teamCount];
         if(!assignments[teamName]) assignments[teamName] = [];
         assignments[teamName].push(name);
     });
-
-    await update(ref(db, 'rooms/' + roomCode), { 
-        revealed: true,
-        assignments: assignments
-    });
+    await update(ref(db, 'rooms/' + roomCode), { revealed: true, assignments: assignments });
 }
 
 function renderResults(assignments) {
-    const container = document.getElementById('group-results');
-    container.innerHTML = Object.entries(assignments).map(([team, members]) => `
+    document.getElementById('group-results').innerHTML = Object.entries(assignments).map(([team, members]) => `
         <div class="group-block">
-            <div class="group-header">
-                <strong>Team ${team}</strong>
-                <span style="margin-left:auto; font-family:Syne; font-size:12px;">${members.length} Members</span>
-            </div>
-            <div style="padding:15px; font-size:14px;">
-                ${members.map(m => `<div style="margin-bottom:8px">👤 ${m}</div>`).join('')}
-            </div>
-        </div>
-    `).join('');
+            <div class="group-header"><strong>Team ${team}</strong><span style="margin-left:auto">${members.length}</span></div>
+            <div style="padding:15px">${members.map(m => `<div style="margin-bottom:5px">👤 ${m}</div>`).join('')}</div>
+        </div>`).join('');
 }
 
-window.resetAll = () => {
+window.resetAll = async () => {
+    // If you are the organizer, delete the room from database for everyone
+    if(isOrganizer) {
+        await remove(ref(db, 'rooms/' + roomCode));
+    }
     localStorage.clear();
-    window.location.href = window.location.pathname; // Reloads to main page
+    location.reload();
 }
 
 function saveSession() {
@@ -290,20 +243,17 @@ function saveSession() {
 }
 
 // Reconnect logic
-const savedRoom = localStorage.getItem('sg_room');
-const savedName = localStorage.getItem('sg_name');
-if(savedRoom && savedName) {
-    roomCode = savedRoom;
-    myName = savedName;
+const r = localStorage.getItem('sg_room'), n = localStorage.getItem('sg_name');
+if(r && n) {
+    roomCode = r; myName = n;
     get(ref(db, 'rooms/' + roomCode)).then(s => {
         if(s.exists()) {
-            isOrganizer = s.val().organizer === myName || Object.keys(s.val().players)[0] === myName;
+            isOrganizer = s.val().organizer === myName;
             teamCount = s.val().teamCount;
             initWaiting();
-            // If already ready, go to waiting. Otherwise, go to pick.
             if(s.val().players[myName]?.ready) showScreen('s-waiting');
             else { buildIconGrid(); showScreen('s-pick'); }
-        }
+        } else { localStorage.clear(); }
     });
 }
 </script>
