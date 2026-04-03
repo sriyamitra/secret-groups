@@ -212,6 +212,8 @@
     <div class="progress-label"><span id="p-count">0</span> ready</div>
     <div class="progress-track"><div class="progress-fill" id="p-bar" style="width:0%"></div></div>
     <ul class="player-list" id="p-list"></ul>
+    <div style="height:18px"></div>
+    <button class="btn btn-ghost" onclick="leaveRoom()">✕ Leave Room</button>
   </div>
 
   <!-- REVEAL -->
@@ -386,7 +388,26 @@ function renderResults(assignments) {
     </div>`).join('');
 }
 
-window.resetAll = async () => {
+window.leaveRoom = async () => {
+  if (roomListener) { roomListener(); roomListener = null; }
+  // Remove just this player from the room (don't delete whole room unless organizer)
+  try {
+    if (isOrganizer) {
+      await remove(ref(db, 'rooms/' + roomCode));
+    } else {
+      await remove(ref(db, `rooms/${roomCode}/players/${myName}`));
+    }
+  } catch(e) {}
+  localStorage.clear();
+  myName = ''; roomCode = ''; isOrganizer = false; revealShown = false; shuffling = false;
+  ['org-name','total-p','join-name','join-code'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = id === 'total-p' ? '4' : '';
+  });
+  document.querySelectorAll('.tc-opt').forEach((el, i) => el.classList.toggle('active', i === 0));
+  teamCount = 2;
+  showScreen('s-lobby');
+};
   if (roomListener) { roomListener(); roomListener = null; }
   if (isOrganizer && roomCode) {
     try { await remove(ref(db, 'rooms/' + roomCode)); } catch(e) {}
