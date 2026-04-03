@@ -14,14 +14,8 @@
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1.5rem;
+    font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text);
+    min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1.5rem;
     background-image: radial-gradient(ellipse at 20% 50%, rgba(232,213,163,0.04) 0%, transparent 60%),
                       radial-gradient(ellipse at 80% 20%, rgba(201,169,110,0.03) 0%, transparent 50%);
   }
@@ -30,64 +24,49 @@
   .screen.active { display: block; }
   @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
-  .eyebrow {
-    font-family: 'Syne', sans-serif;
-    font-size: 10px; font-weight: 700;
-    letter-spacing: 0.2em; text-transform: uppercase;
-    color: var(--muted); margin-bottom: 8px;
-  }
+  .eyebrow { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
   h1 { font-family: 'Syne', sans-serif; font-size: 34px; font-weight: 800; line-height: 1.1; }
   h2 { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 700; margin-bottom: 18px; }
-
   .label { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; margin-top: 16px; display: block; }
 
   input[type="text"] {
-    width: 100%; background: var(--surface2);
-    border: 1px solid var(--border); border-radius: var(--radius-sm);
+    width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm);
     color: var(--text); padding: 13px 15px; outline: none; margin-bottom: 10px;
-    font-family: 'DM Sans', sans-serif; font-size: 15px;
-    transition: border-color 0.2s;
+    font-family: 'DM Sans', sans-serif; font-size: 15px; transition: border-color 0.2s;
   }
   input[type="text"]:focus { border-color: var(--border2); }
 
   .btn {
     display: inline-flex; align-items: center; justify-content: center;
     font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;
-    padding: 14px 24px; border-radius: var(--radius-sm);
-    border: 1px solid var(--border2); background: transparent;
-    color: var(--text); cursor: pointer; transition: all 0.18s; width: 100%;
-    letter-spacing: 0.05em;
+    padding: 14px 24px; border-radius: var(--radius-sm); border: 1px solid var(--border2);
+    background: transparent; color: var(--text); cursor: pointer; transition: all 0.18s; width: 100%; letter-spacing: 0.05em;
   }
   .btn:hover { background: rgba(255,255,255,0.04); }
   .btn-primary { background: var(--accent); color: #1a1408; border-color: var(--accent); }
   .btn-primary:hover { background: var(--accent2); border-color: var(--accent2); }
-  .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .btn:disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
   .btn-ghost { border: none; color: var(--muted); font-size: 13px; padding: 10px; }
   .btn-ghost:hover { color: var(--text); background: transparent; }
 
-  /* ── Lobby ── */
   .logo-mark { font-size: 36px; margin-bottom: 16px; }
   .lobby-actions { margin-top: 32px; display: flex; flex-direction: column; gap: 10px; }
 
-  /* ── Team selector ── */
   .tc-row { display: flex; gap: 8px; margin-bottom: 4px; }
   .tc-opt {
     flex: 1; padding: 11px 8px; text-align: center; cursor: pointer;
     border: 1px solid var(--border); border-radius: 8px;
-    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px;
-    transition: all 0.15s; color: var(--muted);
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; transition: all 0.15s; color: var(--muted);
   }
   .tc-opt:hover { border-color: var(--border2); color: var(--text); }
   .tc-opt.active { background: var(--accent); color: #1a1408; border-color: var(--accent); }
 
-  /* ── Box picker ── */
   .box-grid { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0 20px; }
   .box-card {
     flex: 1; min-width: calc(50% - 6px); max-width: calc(50% - 6px);
-    padding: 18px 12px; background: var(--surface2);
-    border: 1.5px solid var(--border); border-radius: var(--radius-sm);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 6px; cursor: pointer; transition: all 0.18s;
+    padding: 18px 12px; background: var(--surface2); border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm); display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 6px; cursor: pointer; transition: all 0.18s;
   }
   .box-card:hover { border-color: var(--border2); transform: translateY(-1px); }
   .box-card.selected { border-color: var(--accent); background: rgba(232,213,163,0.07); }
@@ -95,28 +74,21 @@
   .box-card .box-label { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
   .box-card.selected .box-label { color: var(--accent); }
 
-  /* ── Room code badge ── */
   .room-badge {
-    background: var(--surface2); border: 1px solid var(--border2);
-    border-radius: var(--radius-sm); padding: 14px 18px;
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 20px;
+    background: var(--surface2); border: 1px solid var(--border2); border-radius: var(--radius-sm);
+    padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;
   }
   .room-badge-label { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
   .room-badge-code { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: var(--accent); letter-spacing: 0.12em; }
 
-  /* ── Progress ── */
   .progress-track { height: 3px; background: var(--border); border-radius: 2px; margin-bottom: 16px; overflow: hidden; }
   .progress-fill { height: 100%; background: var(--accent); transition: width 0.5s ease; border-radius: 2px; }
   .progress-label { font-family: 'Syne', sans-serif; font-size: 11px; color: var(--muted); text-align: right; margin-bottom: 12px; }
 
-  /* ── Player list ── */
   .player-list { list-style: none; display: flex; flex-direction: column; gap: 7px; }
   .player-item {
-    display: flex; align-items: center; gap: 11px;
-    background: var(--surface2); border: 1px solid var(--border);
-    border-radius: 8px; padding: 11px 14px; font-size: 14px;
-    transition: border-color 0.2s;
+    display: flex; align-items: center; gap: 11px; background: var(--surface2);
+    border: 1px solid var(--border); border-radius: 8px; padding: 11px 14px; font-size: 14px; transition: border-color 0.2s;
   }
   .player-item.ready { border-color: rgba(90,186,138,0.25); }
   .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #333; flex-shrink: 0; }
@@ -125,22 +97,15 @@
   .player-status { font-size: 11px; color: var(--muted); font-family: 'Syne', sans-serif; font-weight: 700; letter-spacing: 0.05em; }
   .player-item.ready .player-status { color: var(--success); }
 
-  /* ── Reveal ── */
   .reveal-header { text-align: center; padding: 8px 0 22px; }
   .reveal-icon { font-size: 44px; margin-bottom: 10px; }
   .group-block { border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; margin-bottom: 12px; }
-  .group-header {
-    display: flex; align-items: center; gap: 12px;
-    padding: 13px 16px; border-bottom: 1px solid var(--border);
-    background: rgba(255,255,255,0.025);
-  }
+  .group-header { display: flex; align-items: center; gap: 12px; padding: 13px 16px; border-bottom: 1px solid var(--border); background: rgba(255,255,255,0.025); }
   .group-team-icon { font-size: 22px; }
   .group-team-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; }
   .group-count { margin-left: auto; font-family: 'Syne', sans-serif; font-size: 11px; color: var(--muted); background: var(--surface2); padding: 3px 9px; border-radius: 20px; }
   .group-members { padding: 12px 16px; display: flex; flex-direction: column; gap: 7px; }
   .member-row { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--text); }
-
-  .divider { height: 1px; background: var(--border); margin: 14px 0; }
 </style>
 </head>
 <body>
@@ -183,7 +148,7 @@
     <span class="label">Your Name</span>
     <input type="text" id="join-name" placeholder="Enter your name">
     <span class="label">Room Code</span>
-    <input type="text" id="join-code" placeholder="4-letter code" style="text-transform:uppercase; font-family:'Syne',sans-serif; font-size:20px; font-weight:700; letter-spacing:0.1em;">
+    <input type="text" id="join-code" placeholder="4-letter code" style="text-transform:uppercase;font-family:'Syne',sans-serif;font-size:20px;font-weight:700;letter-spacing:0.1em;">
     <div style="height:4px"></div>
     <button class="btn btn-primary" onclick="joinRoom()">Join</button>
     <button class="btn btn-ghost" onclick="showScreen('s-lobby')">← Back</button>
@@ -193,7 +158,7 @@
   <div id="s-pick" class="screen">
     <div class="eyebrow">The Choice</div>
     <h2>Pick a Box</h2>
-    <p style="color:var(--muted);font-size:14px;margin-bottom:4px;">Choose one — you won't know what's inside until everyone has picked.</p>
+    <p style="color:var(--muted);font-size:14px;margin-bottom:4px;">Choose one — groups are revealed when everyone has picked.</p>
     <div class="box-grid" id="icon-grid"></div>
     <button class="btn btn-primary" id="confirm-btn" disabled onclick="confirmPick()">Confirm My Pick</button>
   </div>
@@ -230,227 +195,221 @@
 
 </div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, set, get, update, onValue, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyAnYuqcNYsaGQKaqknsWkaVf0g7MoY8yTQ",
-  authDomain: "secret-groups-d15ad.firebaseapp.com",
-  databaseURL: "https://secret-groups-d15ad-default-rtdb.firebaseio.com",
-  projectId: "secret-groups-d15ad",
-  storageBucket: "secret-groups-d15ad.firebasestorage.app",
-  messagingSenderId: "452071217507",
-  appId: "1:452071217507:web:0f4a0f8f8521ca09b95b56"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-
-let myName = "", roomCode = "", teamCount = 2, isOrganizer = false;
-let revealShown = false;
-let shuffling = false;       // guard: prevent performShuffle racing
-let roomListener = null;     // hold ref so we can detach before re-attaching
-
-window.setTeams = (n, el) => {
-  teamCount = n;
-  document.querySelectorAll('.tc-opt').forEach(o => o.classList.remove('active'));
-  el.classList.add('active');
-};
-
-window.showScreen = (id) => {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-};
-
-window.createRoom = async () => {
-  myName = document.getElementById('org-name').value.trim();
-  const total = parseInt(document.getElementById('total-p').value);
-  if (!myName || isNaN(total) || total < 2) return alert("Please enter a name and valid player count.");
-  roomCode = Math.random().toString(36).substring(2,6).toUpperCase();
-  isOrganizer = true;
-  await set(ref(db, 'rooms/' + roomCode), {
-    teamCount, maxPlayers: total, revealed: false, organizer: myName,
-    players: { [myName]: { ready: false } }
+<!-- Firebase compat (no ES modules needed — all functions global) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script>
+  firebase.initializeApp({
+    apiKey: "AIzaSyAnYuqcNYsaGQKaqknsWkaVf0g7MoY8yTQ",
+    authDomain: "secret-groups-d15ad.firebaseapp.com",
+    databaseURL: "https://secret-groups-d15ad-default-rtdb.firebaseio.com",
+    projectId: "secret-groups-d15ad",
+    storageBucket: "secret-groups-d15ad.firebasestorage.app",
+    messagingSenderId: "452071217507",
+    appId: "1:452071217507:web:0f4a0f8f8521ca09b95b56"
   });
-  saveSession(); buildBoxGrid(); showScreen('s-pick');
-};
 
-window.joinRoom = async () => {
-  myName = document.getElementById('join-name').value.trim();
-  roomCode = document.getElementById('join-code').value.toUpperCase().trim();
-  if (!myName || roomCode.length !== 4) return alert("Enter your name and a valid 4-letter code.");
-  const snap = await get(ref(db, 'rooms/' + roomCode));
-  if (snap.exists()) {
-    teamCount = snap.val().teamCount;
-    await update(ref(db, `rooms/${roomCode}/players/${myName}`), { ready: false });
-    saveSession(); buildBoxGrid(); showScreen('s-pick');
-  } else {
-    alert("Room not found. Check the code and try again.");
+  var db = firebase.database();
+  var myName = '', roomCode = '', teamCount = 2, isOrganizer = false;
+  var revealShown = false, shuffling = false, roomRef = null, roomCb = null;
+
+  /* ── Navigation ── */
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+    document.getElementById(id).classList.add('active');
   }
-};
 
-function buildBoxGrid() {
-  const grid = document.getElementById('icon-grid');
-  grid.innerHTML = '';
-  const boxIcons = ['📦','🎁','🎴','🃏','🗃️','📫'];
-  for (let i = 0; i < teamCount; i++) {
-    const card = document.createElement('div');
-    card.className = 'box-card';
-    card.innerHTML = `<span class="box-icon">${boxIcons[i]}</span><span class="box-label">Box ${i+1}</span>`;
-    card.onclick = () => {
-      document.querySelectorAll('.box-card').forEach(c => c.classList.remove('selected'));
-      card.classList.add('selected');
-      document.getElementById('confirm-btn').disabled = false;
-    };
-    grid.appendChild(card);
+  function setTeams(n, el) {
+    teamCount = n;
+    document.querySelectorAll('.tc-opt').forEach(function(o) { o.classList.remove('active'); });
+    el.classList.add('active');
   }
-}
 
-window.confirmPick = async () => {
-  await update(ref(db, `rooms/${roomCode}/players/${myName}`), { ready: true });
-  initWaiting();
-  showScreen('s-waiting');
-};
-
-function initWaiting() {
-  document.getElementById('wait-room-code').innerText = roomCode;
-  revealShown = false;
-  shuffling = false;
-
-  // Detach any existing listener before attaching a new one
-  if (roomListener) { roomListener(); roomListener = null; }
-
-  const roomRef = ref(db, 'rooms/' + roomCode);
-  roomListener = onValue(roomRef, (snap) => {
-    const data = snap.val();
-    if (!data) { resetAll(); return; }
-
-    const players = Object.entries(data.players);
-    const readyCount = players.filter(p => p[1].ready).length;
-    const total = data.maxPlayers;
-
-    // Progress
-    document.getElementById('p-bar').style.width = (readyCount / total * 100) + '%';
-    document.getElementById('p-count').innerText = `${readyCount} / ${total}`;
-
-    // Player list
-    document.getElementById('p-list').innerHTML = players.map(([name, info]) => `
-      <li class="player-item ${info.ready ? 'ready' : ''}">
-        <div class="status-dot ${info.ready ? 'done' : ''}"></div>
-        <span class="player-name">${name}</span>
-        <span class="player-status">${info.ready ? 'Ready ✓' : 'Choosing…'}</span>
-      </li>`).join('');
-
-    // Only organizer triggers shuffle — guarded so it only fires ONCE
-    if (isOrganizer && !data.revealed && !shuffling && readyCount >= total) {
-      shuffling = true;
-      performShuffle(data, players);
-    }
-
-    // EVERYONE: as soon as revealed=true appears in Firebase, show results
-    if (data.revealed && !revealShown) {
-      revealShown = true;
-      renderResults(data.assignments);
-      showScreen('s-reveal');
-    }
-  });
-}
-
-async function performShuffle(data, playerEntries) {
-  let names = playerEntries.map(p => p[0]).sort(() => Math.random() - 0.5);
-  const teamEmojis = ['🦊','🐺','🦅','🐯'];
-  const teamLabels = ['Fox','Wolf','Eagle','Tiger'];
-  const assignments = {};
-
-  names.forEach((name, i) => {
-    const idx = i % data.teamCount;
-    const key = `${teamEmojis[idx]} ${teamLabels[idx]}`;
-    if (!assignments[key]) assignments[key] = [];
-    assignments[key].push(name);
-  });
-
-  await update(ref(db, 'rooms/' + roomCode), { revealed: true, assignments });
-}
-
-function renderResults(assignments) {
-  const teamEmojis = {'🦊 Fox':'🦊','🐺 Wolf':'🐺','🦅 Eagle':'🦅','🐯 Tiger':'🐯'};
-  document.getElementById('group-results').innerHTML = Object.entries(assignments).map(([team, members]) => `
-    <div class="group-block">
-      <div class="group-header">
-        <span class="group-team-icon">${teamEmojis[team] || '👥'}</span>
-        <span class="group-team-name">Team ${team.split(' ')[1] || team}</span>
-        <span class="group-count">${members.length} players</span>
-      </div>
-      <div class="group-members">
-        ${members.map(m => `<div class="member-row">👤 ${m}</div>`).join('')}
-      </div>
-    </div>`).join('');
-}
-
-window.leaveRoom = async () => {
-  if (roomListener) { roomListener(); roomListener = null; }
-  // Remove just this player from the room (don't delete whole room unless organizer)
-  try {
-    if (isOrganizer) {
-      await remove(ref(db, 'rooms/' + roomCode));
-    } else {
-      await remove(ref(db, `rooms/${roomCode}/players/${myName}`));
-    }
-  } catch(e) {}
-  localStorage.clear();
-  myName = ''; roomCode = ''; isOrganizer = false; revealShown = false; shuffling = false;
-  ['org-name','total-p','join-name','join-code'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = id === 'total-p' ? '4' : '';
-  });
-  document.querySelectorAll('.tc-opt').forEach((el, i) => el.classList.toggle('active', i === 0));
-  teamCount = 2;
-  showScreen('s-lobby');
-};
-  if (roomListener) { roomListener(); roomListener = null; }
-  if (isOrganizer && roomCode) {
-    try { await remove(ref(db, 'rooms/' + roomCode)); } catch(e) {}
+  /* ── Create Room ── */
+  function createRoom() {
+    myName = document.getElementById('org-name').value.trim();
+    var total = parseInt(document.getElementById('total-p').value);
+    if (!myName || isNaN(total) || total < 2) { alert('Please enter a name and valid player count.'); return; }
+    roomCode = Math.random().toString(36).substring(2, 6).toUpperCase();
+    isOrganizer = true;
+    var data = { teamCount: teamCount, maxPlayers: total, revealed: false, organizer: myName, players: {} };
+    data.players[myName] = { ready: false };
+    db.ref('rooms/' + roomCode).set(data).then(function() {
+      saveSession(); buildBoxGrid(); showScreen('s-pick');
+    }).catch(function(e) { alert('Error: ' + e.message); });
   }
-  localStorage.clear();
-  myName = ''; roomCode = ''; isOrganizer = false; revealShown = false; shuffling = false;
-  // Reset forms
-  ['org-name','total-p','join-name','join-code'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = id === 'total-p' ? '4' : '';
-  });
-  document.querySelectorAll('.tc-opt').forEach((el, i) => {
-    el.classList.toggle('active', i === 0);
-  });
-  teamCount = 2;
-  showScreen('s-lobby');
-};
 
-function saveSession() {
-  localStorage.setItem('sg_room', roomCode);
-  localStorage.setItem('sg_name', myName);
-}
+  /* ── Join Room ── */
+  function joinRoom() {
+    myName = document.getElementById('join-name').value.trim();
+    roomCode = document.getElementById('join-code').value.toUpperCase().trim();
+    if (!myName || roomCode.length < 3) { alert('Enter your name and a valid room code.'); return; }
+    db.ref('rooms/' + roomCode).get().then(function(snap) {
+      if (snap.exists()) {
+        teamCount = snap.val().teamCount;
+        var upd = {}; upd['players/' + myName] = { ready: false };
+        db.ref('rooms/' + roomCode).update(upd).then(function() {
+          saveSession(); buildBoxGrid(); showScreen('s-pick');
+        });
+      } else {
+        alert('Room not found. Check the code and try again.');
+      }
+    }).catch(function(e) { alert('Error: ' + e.message); });
+  }
 
-// Reconnect on reload
-const r = localStorage.getItem('sg_room'), n = localStorage.getItem('sg_name');
-if (r && n) {
-  roomCode = r; myName = n;
-  get(ref(db, 'rooms/' + roomCode)).then(snap => {
-    if (snap.exists()) {
-      const data = snap.val();
-      isOrganizer = data.organizer === myName;
-      teamCount = data.teamCount;
-      if (data.revealed) {
+  /* ── Box grid ── */
+  function buildBoxGrid() {
+    var grid = document.getElementById('icon-grid');
+    grid.innerHTML = '';
+    var icons = ['📦','🎁','🎴','🃏','🗃️','📫'];
+    for (var i = 0; i < teamCount; i++) {
+      (function(idx) {
+        var card = document.createElement('div');
+        card.className = 'box-card';
+        card.innerHTML = '<span class="box-icon">' + icons[idx] + '</span><span class="box-label">Box ' + (idx + 1) + '</span>';
+        card.onclick = function() {
+          document.querySelectorAll('.box-card').forEach(function(c) { c.classList.remove('selected'); });
+          card.classList.add('selected');
+          document.getElementById('confirm-btn').disabled = false;
+        };
+        grid.appendChild(card);
+      })(i);
+    }
+  }
+
+  /* ── Confirm pick ── */
+  function confirmPick() {
+    var upd = {}; upd['players/' + myName + '/ready'] = true;
+    db.ref('rooms/' + roomCode).update(upd).then(function() {
+      initWaiting(); showScreen('s-waiting');
+    });
+  }
+
+  /* ── Waiting room listener ── */
+  function detachListener() {
+    if (roomRef && roomCb) { roomRef.off('value', roomCb); roomRef = null; roomCb = null; }
+  }
+
+  function initWaiting() {
+    document.getElementById('wait-room-code').innerText = roomCode;
+    revealShown = false; shuffling = false;
+    detachListener();
+    roomRef = db.ref('rooms/' + roomCode);
+    roomCb = roomRef.on('value', function(snap) {
+      var data = snap.val();
+      if (!data) { clearState(); return; }
+      var players = Object.entries(data.players || {});
+      var readyCount = players.filter(function(p) { return p[1].ready; }).length;
+      var total = data.maxPlayers;
+
+      document.getElementById('p-bar').style.width = Math.round(readyCount / total * 100) + '%';
+      document.getElementById('p-count').innerText = readyCount + ' / ' + total;
+      document.getElementById('p-list').innerHTML = players.map(function(p) {
+        return '<li class="player-item ' + (p[1].ready ? 'ready' : '') + '">' +
+          '<div class="status-dot ' + (p[1].ready ? 'done' : '') + '"></div>' +
+          '<span class="player-name">' + p[0] + '</span>' +
+          '<span class="player-status">' + (p[1].ready ? 'Ready ✓' : 'Choosing…') + '</span></li>';
+      }).join('');
+
+      // Only organizer shuffles — once
+      if (isOrganizer && !data.revealed && !shuffling && readyCount >= total) {
+        shuffling = true;
+        performShuffle(data, players);
+      }
+
+      // Everyone transitions on reveal
+      if (data.revealed && !revealShown) {
+        revealShown = true;
         renderResults(data.assignments);
         showScreen('s-reveal');
-      } else {
-        initWaiting();
-        if (data.players[myName]?.ready) showScreen('s-waiting');
-        else { buildBoxGrid(); showScreen('s-pick'); }
       }
-    } else { localStorage.clear(); }
-  });
-}
+    });
+  }
+
+  /* ── Shuffle & assign ── */
+  function performShuffle(data, playerEntries) {
+    var names = playerEntries.map(function(p) { return p[0]; }).sort(function() { return Math.random() - 0.5; });
+    var emojis = ['🦊','🐺','🦅','🐯'], labels = ['Fox','Wolf','Eagle','Tiger'];
+    var assignments = {};
+    names.forEach(function(name, i) {
+      var idx = i % data.teamCount;
+      var key = emojis[idx] + ' ' + labels[idx];
+      if (!assignments[key]) assignments[key] = [];
+      assignments[key].push(name);
+    });
+    db.ref('rooms/' + roomCode).update({ revealed: true, assignments: assignments });
+  }
+
+  /* ── Render results ── */
+  function renderResults(assignments) {
+    var icons = { '🦊 Fox':'🦊','🐺 Wolf':'🐺','🦅 Eagle':'🦅','🐯 Tiger':'🐯' };
+    document.getElementById('group-results').innerHTML = Object.entries(assignments).map(function(e) {
+      var team = e[0], members = e[1];
+      return '<div class="group-block"><div class="group-header">' +
+        '<span class="group-team-icon">' + (icons[team] || '👥') + '</span>' +
+        '<span class="group-team-name">Team ' + (team.split(' ')[1] || team) + '</span>' +
+        '<span class="group-count">' + members.length + ' players</span></div>' +
+        '<div class="group-members">' +
+        members.map(function(m) { return '<div class="member-row">👤 ' + m + '</div>'; }).join('') +
+        '</div></div>';
+    }).join('');
+  }
+
+  /* ── Leave / Reset ── */
+  function leaveRoom() {
+    detachListener();
+    if (isOrganizer && roomCode) { db.ref('rooms/' + roomCode).remove(); }
+    else if (roomCode && myName) { db.ref('rooms/' + roomCode + '/players/' + myName).remove(); }
+    clearState();
+  }
+
+  function resetAll() {
+    detachListener();
+    if (isOrganizer && roomCode) { db.ref('rooms/' + roomCode).remove(); }
+    clearState();
+  }
+
+  function clearState() {
+    localStorage.clear();
+    myName = ''; roomCode = ''; isOrganizer = false;
+    revealShown = false; shuffling = false; teamCount = 2;
+    ['org-name','join-name','join-code'].forEach(function(id) {
+      var el = document.getElementById(id); if (el) el.value = '';
+    });
+    document.getElementById('total-p').value = '4';
+    document.querySelectorAll('.tc-opt').forEach(function(el, i) { el.classList.toggle('active', i === 0); });
+    showScreen('s-lobby');
+  }
+
+  function saveSession() {
+    localStorage.setItem('sg_room', roomCode);
+    localStorage.setItem('sg_name', myName);
+  }
+
+  /* ── Auto-reconnect on page reload ── */
+  var savedRoom = localStorage.getItem('sg_room');
+  var savedName = localStorage.getItem('sg_name');
+  if (savedRoom && savedName) {
+    roomCode = savedRoom; myName = savedName;
+    db.ref('rooms/' + roomCode).get().then(function(snap) {
+      if (snap.exists()) {
+        var data = snap.val();
+        isOrganizer = (data.organizer === myName);
+        teamCount = data.teamCount;
+        if (data.revealed) {
+          renderResults(data.assignments);
+          showScreen('s-reveal');
+        } else {
+          initWaiting();
+          var playerData = data.players && data.players[myName];
+          if (playerData && playerData.ready) showScreen('s-waiting');
+          else { buildBoxGrid(); showScreen('s-pick'); }
+        }
+      } else {
+        localStorage.clear();
+      }
+    });
+  }
 </script>
 </body>
 </html>
