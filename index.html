@@ -6,7 +6,6 @@
 <title>Secret Groups</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
 <style>
-  /* Styles remain the same as your original provided CSS */
   :root {
     --bg: #0d0d0d; --surface: #161616; --surface2: #1e1e1e;
     --border: rgba(255,255,255,0.08); --border2: rgba(255,255,255,0.15);
@@ -19,26 +18,39 @@
   .screen { display: none; animation: fadeUp 0.35s ease; }
   .screen.active { display: block; }
   @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+  
   .eyebrow { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
   h1 { font-family: 'Syne', sans-serif; font-size: 36px; font-weight: 800; line-height: 1.1; color: var(--text); }
-  h2 { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 700; color: var(--text); }
-  input[type="text"] { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); padding: 14px 16px; outline: none; margin-bottom: 10px; }
+  h2 { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 700; color: var(--text); margin-bottom: 15px; }
+  
+  input[type="text"] { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); padding: 14px 16px; outline: none; margin-bottom: 12px; font-family: inherit; }
+  
   .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 600; padding: 14px 24px; border-radius: var(--radius-sm); border: 1px solid var(--border2); background: transparent; color: var(--text); cursor: pointer; transition: all 0.18s; width: 100%; }
   .btn-primary { background: var(--accent); color: #1a1408; border-color: var(--accent); }
+  .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  /* Icon Grid Styles */
   .icon-grid { display: grid; gap: 14px; margin: 1.5rem 0; }
-  .icon-card { aspect-ratio: 1; background: var(--surface2); border: 1.5px solid var(--border); border-radius: var(--radius); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; }
+  .icon-card { aspect-ratio: 1; background: var(--surface2); border: 1.5px solid var(--border); border-radius: var(--radius); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; position: relative; }
+  .icon-card:hover { border-color: var(--border2); }
   .icon-card.selected { border-color: var(--accent); background: rgba(232,213,163,0.06); }
-  .progress-track { height: 3px; background: var(--border); border-radius: 2px; margin: 1.25rem 0; overflow: hidden; }
+  .big-emoji { font-size: 40px; margin-bottom: 8px; }
+  .option-label { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--muted); }
+
+  .progress-track { height: 3px; background: var(--border); border-radius: 2px; margin: 1.5rem 0; overflow: hidden; }
   .progress-fill { height: 100%; background: var(--accent); transition: width 0.5s; }
-  .player-list { list-style: none; margin-top: 1rem; }
-  .player-item { display: flex; align-items: center; gap: 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 8px; }
-  .group-block { border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; margin-bottom: 14px; background: var(--surface); }
-  .group-header { display: flex; align-items: center; gap: 14px; padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); }
+  
+  .player-list { list-style: none; }
+  .player-item { display: flex; align-items: center; gap: 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 8px; font-size: 14px; }
   .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #444; }
-  .status-dot.done { background: var(--success); }
-  .tc-opt { flex: 1; padding: 10px; text-align: center; cursor: pointer; border: 1px solid var(--border); }
-  .tc-opt.active { background: var(--accent); color: #000; }
-  .team-count-row { display: flex; margin-bottom: 20px; border-radius: 8px; overflow: hidden; }
+  .status-dot.done { background: var(--success); box-shadow: 0 0 8px var(--success); }
+
+  .group-block { border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; margin-bottom: 14px; background: var(--surface); }
+  .group-header { display: flex; align-items: center; gap: 14px; padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); background: rgba(255,255,255,0.03); }
+  
+  .tc-row { display: flex; gap: 8px; margin-bottom: 20px; }
+  .tc-opt { flex: 1; padding: 12px; text-align: center; cursor: pointer; border: 1px solid var(--border); border-radius: 8px; font-family: 'Syne'; font-weight: 700; }
+  .tc-opt.active { background: var(--accent); color: #000; border-color: var(--accent); }
 </style>
 </head>
 <body>
@@ -47,54 +59,61 @@
   <div id="s-lobby" class="screen active">
     <div class="eyebrow">Secret Groups</div>
     <h1>Pick your side 🎭</h1>
-    <br>
-    <button class="btn btn-primary" onclick="showScreen('s-create')">Create Room</button>
-    <div style="height:10px"></div>
-    <button class="btn" onclick="showScreen('s-join')">Join Room</button>
+    <div style="margin-top: 30px;" class="stack">
+      <button class="btn btn-primary" onclick="showScreen('s-create')">Create Room</button>
+      <div style="height:12px"></div>
+      <button class="btn" onclick="showScreen('s-join')">Join Room</button>
+    </div>
   </div>
 
   <div id="s-create" class="screen">
-    <h2>Setup Game</h2>
+    <div class="eyebrow">Organizer</div>
+    <h2>New Room</h2>
     <input type="text" id="org-name" placeholder="Your Name">
     <p class="eyebrow">Number of Teams</p>
-    <div class="team-count-row">
+    <div class="tc-row">
         <div class="tc-opt active" onclick="setTeams(2, this)">2</div>
         <div class="tc-opt" onclick="setTeams(3, this)">3</div>
         <div class="tc-opt" onclick="setTeams(4, this)">4</div>
     </div>
-    <p class="eyebrow">Total Players</p>
-    <input type="text" id="total-p" placeholder="Total players (e.g. 4)" value="4">
-    <button class="btn btn-primary" onclick="createRoom()">Start</button>
+    <p class="eyebrow">Total Players (Target)</p>
+    <input type="text" id="total-p" placeholder="Total players" value="4">
+    <button class="btn btn-primary" onclick="createRoom()">Create & Continue</button>
+    <button class="btn" onclick="showScreen('s-lobby')" style="border:none; margin-top:10px;">Back</button>
   </div>
 
   <div id="s-join" class="screen">
-    <h2>Join Game</h2>
+    <div class="eyebrow">Player</div>
+    <h2>Join Room</h2>
     <input type="text" id="join-name" placeholder="Your Name">
-    <input type="text" id="join-code" placeholder="4-Letter Code">
-    <button class="btn btn-primary" onclick="joinRoom()">Enter</button>
+    <input type="text" id="join-code" placeholder="4-Letter Code" style="text-transform: uppercase;">
+    <button class="btn btn-primary" onclick="joinRoom()">Enter Room</button>
+    <button class="btn" onclick="showScreen('s-lobby')" style="border:none; margin-top:10px;">Back</button>
   </div>
 
   <div id="s-pick" class="screen">
-    <h2>Choose a Box</h2>
-    <p>Boxes are just to confirm you're ready!</p>
-    <div class="icon-grid" id="icon-grid">
-        <div class="icon-card" onclick="selectBox(0, this)">?</div>
-        <div class="icon-card" onclick="selectBox(1, this)">?</div>
-    </div>
-    <button class="btn btn-primary" id="confirm-btn" disabled onclick="confirmPick()">I'm Ready</button>
+    <div class="eyebrow">The Choice</div>
+    <h2>Pick a Box</h2>
+    <p style="color: var(--muted); font-size: 14px;">Your selection determines your fate...</p>
+    <div class="icon-grid" id="icon-grid"></div>
+    <button class="btn btn-primary" id="confirm-btn" disabled onclick="confirmPick()">Confirm Choice</button>
   </div>
 
   <div id="s-waiting" class="screen">
-    <h2 id="wait-code-display">Room: ----</h2>
-    <p>Waiting for everyone to join...</p>
+    <div class="eyebrow" id="wait-room-label">Room: ----</div>
+    <h2>Waiting...</h2>
+    <p id="wait-msg">Waiting for others to make their choice.</p>
     <div class="progress-track"><div class="progress-fill" id="p-bar" style="width:0%"></div></div>
     <ul class="player-list" id="p-list"></ul>
   </div>
 
   <div id="s-reveal" class="screen">
-    <h2>Teams are Ready!</h2>
+    <div style="text-align: center; margin-bottom: 20px;">
+        <span style="font-size: 40px;">🎉</span>
+        <h2>Groups Revealed!</h2>
+    </div>
     <div id="group-results"></div>
-    <button class="btn" onclick="location.reload()">New Game</button>
+    <button class="btn btn-primary" onclick="resetAll()" style="margin-top: 20px;">Start Over</button>
   </div>
 
 </div>
@@ -103,7 +122,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, set, get, update, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-// YOUR FIREBASE CONFIG
 const firebaseConfig = {
   apiKey: "AIzaSyAnYuqcNYsaGQKaqknsWkaVf0g7MoY8yTQ",
   authDomain: "secret-groups-d15ad.firebaseapp.com",
@@ -121,6 +139,7 @@ let myName = "";
 let roomCode = "";
 let teamCount = 2;
 let isOrganizer = false;
+let mySelection = null;
 
 window.setTeams = (n, el) => {
     teamCount = n;
@@ -134,8 +153,10 @@ window.showScreen = (id) => {
 }
 
 window.createRoom = async () => {
-    myName = document.getElementById('org-name').value;
+    myName = document.getElementById('org-name').value.trim();
     const total = parseInt(document.getElementById('total-p').value);
+    if(!myName || isNaN(total)) return alert("Fill all fields");
+    
     roomCode = Math.random().toString(36).substring(2,6).toUpperCase();
     isOrganizer = true;
     
@@ -146,39 +167,55 @@ window.createRoom = async () => {
         players: { [myName]: { ready: false } }
     });
     
-    localStorage.setItem('room', roomCode);
-    localStorage.setItem('name', myName);
-    initWaiting();
+    saveSession();
+    buildIconGrid();
     showScreen('s-pick');
 }
 
 window.joinRoom = async () => {
-    myName = document.getElementById('join-name').value;
-    roomCode = document.getElementById('join-code').value.toUpperCase();
+    myName = document.getElementById('join-name').value.trim();
+    roomCode = document.getElementById('join-code').value.toUpperCase().trim();
+    if(!myName || !roomCode) return;
     
     const snap = await get(ref(db, 'rooms/' + roomCode));
     if(snap.exists()) {
+        const data = snap.val();
+        teamCount = data.teamCount;
         await update(ref(db, `rooms/${roomCode}/players/${myName}`), { ready: false });
-        localStorage.setItem('room', roomCode);
-        localStorage.setItem('name', myName);
-        initWaiting();
+        saveSession();
+        buildIconGrid();
         showScreen('s-pick');
+    } else {
+        alert("Room not found");
     }
 }
 
-window.selectBox = (i, el) => {
-    document.querySelectorAll('.icon-card').forEach(c => c.classList.remove('selected'));
-    el.classList.add('selected');
-    document.getElementById('confirm-btn').disabled = false;
+function buildIconGrid() {
+    const grid = document.getElementById('icon-grid');
+    grid.innerHTML = '';
+    // Show cards based on team count
+    for (let i = 0; i < teamCount; i++) {
+        const card = document.createElement('div');
+        card.className = 'icon-card';
+        card.innerHTML = `<span class="big-emoji">❓</span><span class="option-label">Box ${i+1}</span>`;
+        card.onclick = () => {
+            mySelection = i;
+            document.querySelectorAll('.icon-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            document.getElementById('confirm-btn').disabled = false;
+        };
+        grid.appendChild(card);
+    }
 }
 
 window.confirmPick = async () => {
     await update(ref(db, `rooms/${roomCode}/players/${myName}`), { ready: true });
+    initWaiting();
     showScreen('s-waiting');
 }
 
 function initWaiting() {
-    document.getElementById('wait-code-display').innerText = "Room: " + roomCode;
+    document.getElementById('wait-room-label').innerText = "Room: " + roomCode;
     onValue(ref(db, 'rooms/' + roomCode), (snap) => {
         const data = snap.val();
         if(!data) return;
@@ -186,21 +223,20 @@ function initWaiting() {
         const players = Object.entries(data.players);
         const readyCount = players.filter(p => p[1].ready).length;
         
-        // Update Progress UI
         document.getElementById('p-bar').style.width = (readyCount / data.maxPlayers * 100) + "%";
         document.getElementById('p-list').innerHTML = players.map(p => `
             <li class="player-item">
                 <div class="status-dot ${p[1].ready ? 'done' : ''}"></div>
-                ${p[0]}
+                ${p[0]} ${p[0] === myName ? '(You)' : ''}
             </li>
         `).join('');
 
-        // AUTOMATIC SHUFFLE (When everyone is ready)
-        if(readyCount >= data.maxPlayers && !data.revealed) {
-            if(isOrganizer) performShuffle(data, players);
+        // Logic: Organizer shuffles when everyone is ready
+        if(readyCount >= data.maxPlayers && !data.revealed && isOrganizer) {
+            performShuffle(data, players);
         }
 
-        // AUTO-REVEAL (For everyone)
+        // Trigger Reveal screen for everyone
         if(data.revealed) {
             renderResults(data.assignments);
             showScreen('s-reveal');
@@ -209,20 +245,15 @@ function initWaiting() {
 }
 
 async function performShuffle(data, playerEntries) {
-    const playerNames = playerEntries.map(p => p[0]);
-    // Fisher-Yates Shuffle
-    for (let i = playerNames.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [playerNames[i], playerNames[j]] = [playerNames[j], playerNames[i]];
-    }
+    let names = playerEntries.map(p => p[0]);
+    // Randomize list
+    names.sort(() => Math.random() - 0.5);
 
     const assignments = {};
     const icons = ["🦊 Fox", "🐺 Wolf", "🦅 Eagle", "🐯 Tiger"];
     
-    // Distribute players into teams
-    playerNames.forEach((name, index) => {
-        const teamIndex = index % data.teamCount;
-        const teamName = icons[teamIndex];
+    names.forEach((name, index) => {
+        const teamName = icons[index % data.teamCount];
         if(!assignments[teamName]) assignments[teamName] = [];
         assignments[teamName].push(name);
     });
@@ -239,20 +270,41 @@ function renderResults(assignments) {
         <div class="group-block">
             <div class="group-header">
                 <strong>Team ${team}</strong>
-                <span style="margin-left:auto">${members.length}</span>
+                <span style="margin-left:auto; font-family:Syne; font-size:12px;">${members.length} Members</span>
             </div>
-            <div style="padding:15px">
-                ${members.map(m => `<div style="margin-bottom:5px">👤 ${m}</div>`).join('')}
+            <div style="padding:15px; font-size:14px;">
+                ${members.map(m => `<div style="margin-bottom:8px">👤 ${m}</div>`).join('')}
             </div>
         </div>
     `).join('');
 }
 
-// Re-connect on refresh
-if(localStorage.getItem('room')) {
-    roomCode = localStorage.getItem('room');
-    myName = localStorage.getItem('name');
-    initWaiting();
+window.resetAll = () => {
+    localStorage.clear();
+    window.location.href = window.location.pathname; // Reloads to main page
+}
+
+function saveSession() {
+    localStorage.setItem('sg_room', roomCode);
+    localStorage.setItem('sg_name', myName);
+}
+
+// Reconnect logic
+const savedRoom = localStorage.getItem('sg_room');
+const savedName = localStorage.getItem('sg_name');
+if(savedRoom && savedName) {
+    roomCode = savedRoom;
+    myName = savedName;
+    get(ref(db, 'rooms/' + roomCode)).then(s => {
+        if(s.exists()) {
+            isOrganizer = s.val().organizer === myName || Object.keys(s.val().players)[0] === myName;
+            teamCount = s.val().teamCount;
+            initWaiting();
+            // If already ready, go to waiting. Otherwise, go to pick.
+            if(s.val().players[myName]?.ready) showScreen('s-waiting');
+            else { buildIconGrid(); showScreen('s-pick'); }
+        }
+    });
 }
 </script>
 </body>
